@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangman.Logic", "Hangman.Logic\Hangman.Logic.csproj", "{E93E54B6-AD8B-49A3-ADB2-99C41B59D21A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangman.Test", "Hangman.Test\Hangman.Test.csproj", "{59717A3F-98B8-4558-8CE1-4735861F5263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangman.Console", "Hangman.Console\Hangman.Console.csproj", "{BCD5D9D5-D869-4857-81F9-08D9F776A6BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangman.Web", "Hangman.Web\Hangman.Web.csproj", "{C3C38175-90CF-49EF-BBF3-E77172B83E2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E93E54B6-AD8B-49A3-ADB2-99C41B59D21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93E54B6-AD8B-49A3-ADB2-99C41B59D21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93E54B6-AD8B-49A3-ADB2-99C41B59D21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93E54B6-AD8B-49A3-ADB2-99C41B59D21A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59717A3F-98B8-4558-8CE1-4735861F5263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59717A3F-98B8-4558-8CE1-4735861F5263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59717A3F-98B8-4558-8CE1-4735861F5263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59717A3F-98B8-4558-8CE1-4735861F5263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD5D9D5-D869-4857-81F9-08D9F776A6BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD5D9D5-D869-4857-81F9-08D9F776A6BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD5D9D5-D869-4857-81F9-08D9F776A6BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD5D9D5-D869-4857-81F9-08D9F776A6BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3C38175-90CF-49EF-BBF3-E77172B83E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3C38175-90CF-49EF-BBF3-E77172B83E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3C38175-90CF-49EF-BBF3-E77172B83E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3C38175-90CF-49EF-BBF3-E77172B83E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
