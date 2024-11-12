@@ -1,3 +1,4 @@
+namespace Hangman.Logic;
 public class Board :  IBoard
 {
     private int _maxGuesses;

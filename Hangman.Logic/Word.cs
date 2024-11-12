@@ -1,3 +1,4 @@
+namespace Hangman.Logic;
 public class Word
 {
     private string _wordToGuess;
