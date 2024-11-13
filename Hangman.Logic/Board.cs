@@ -27,7 +27,7 @@ public class Board : IBoard
 
     public bool HasGuesses()
     {
-        return false;
+        return _maxGuesses > 0;
     }
 
     public void AddToGuesses(char guess)
