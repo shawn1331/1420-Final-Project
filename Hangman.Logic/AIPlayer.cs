@@ -9,7 +9,8 @@ public class AIPlayer : Player
 
     public override char MakeGuess()
     {
-        return default;
+        Random rand = new();
+        return (char)('A' + rand.Next(0,26));
     }
 
     public override string MakeCompleteGuess()
