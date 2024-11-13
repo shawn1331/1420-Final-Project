@@ -104,6 +104,15 @@ public class UnitTest1
     }
 
     [Fact]
+    public void TestCompletelyGuessedShouldBeTrue()
+    {
+        Word word = new("hello");
+        string guess = "hello";
+        word.CheckCompleteGuess(guess);
+        word.CompletelyGuessed().Should().Be(true);
+    }
+
+    [Fact]
     public void TestPrintBoard()
     {
 
