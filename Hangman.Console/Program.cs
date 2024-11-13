@@ -10,6 +10,8 @@
 
 
 
+
+
 static char GetUserGuess()
 {
     Console.WriteLine("Please enter the letter you would like to guess: ");
