@@ -17,7 +17,7 @@ public class Word
 
     public bool CompletelyGuessed()
     {
-        return false;
+        return new string(_guessedLetters) == _wordToGuess;
     }
 
     public bool CheckGuess(char letter)
