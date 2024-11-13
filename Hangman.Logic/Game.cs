@@ -6,7 +6,7 @@ public class Game
     private Player _currentPlayer;
     private Word _word;
     private Board _board;
-    protected static Random _random;
+    public static Random _random;
     public delegate char GetGuessDelegate();
     public delegate string GetCompleteGuessDelegate();
     private int NumberOfPlayers { get; set; }

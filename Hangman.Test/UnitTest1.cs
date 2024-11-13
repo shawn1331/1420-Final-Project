@@ -51,7 +51,8 @@ public class UnitTest1
     [Fact]
     public void TestHasGuesses()
     {
-
+        Board board = new(6);
+        board.HasGuesses().Should().Be(true);
     }
 
     [Fact]
