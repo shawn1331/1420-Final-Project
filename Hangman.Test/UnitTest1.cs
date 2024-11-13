@@ -78,21 +78,54 @@ public class UnitTest1
         word.CheckGuess(guess).Should().Be(true);
     }
 
+    // [Fact]
+    // public void TestCompletelyGuessedShouldBeFalse()
+    // {
+    //     Word word = new("hello");
+    //     char guess = 'O';
+    //     word.CheckGuess(guess);
+    //     word.CompletelyGuessed().Should().Be(false);
+    // }
+
+    [Fact]
+    public void TestCheckCompleteGuessShouldBeTrue()
+    {
+        Word word = new("hello");
+        string guess = "hello";
+        word.CheckCompleteGuess(guess).Should().Be(true);
+    }
+
+    [Fact]
+    public void TestCheckCompleteGuessShouldBeFalse()
+    {
+        Word word = new("hello");
+        string guess = "asdfj";
+        word.CheckCompleteGuess(guess).Should().Be(false);
+    }
+
     [Fact]
     public void TestPrintBoard()
     {
 
     }
 
+    // [Fact]
+    // public void TestPrintWord()
+    // {
+    //     Word word = new("hello");
+    //     Board board = new(6);
+    //     word._guessedLetters.Should().BeEquivalentTo<char>(new char []{'_','_','_','_','_'});
+    // }
+
     [Fact]
-    public void TestPrintWord()
+    public void TestAddToGuesses()
     {
-
-    }
-
-    [Fact]
-    public void Test()
-    {
-
+        Board board = new(6);
+        Word word = new("hello");
+        char guess = 'L';
+        word.CheckGuess(guess);
+        board.AddToGuesses(guess);
+        board._pastGuesses.Should().BeEquivalentTo<char>(new List<char> {'L'});
+        
     }
 }

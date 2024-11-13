@@ -2,7 +2,7 @@ namespace Hangman.Logic;
 public class Word
 {
     private string _wordToGuess;
-    private char[] _guessedLetters;
+    public char[] _guessedLetters;
 
     public Word(string word)
     {
@@ -36,6 +36,16 @@ public class Word
 
     public bool CheckCompleteGuess(string word)
     {
-        return false;
+        string guess = word.ToUpper();
+        bool completeGuess = false;
+        for (int i = 0; i < _wordToGuess.Length; i++)
+        {
+            if (_wordToGuess[i] == guess[i])
+            {
+                _guessedLetters[i] = guess[i];
+                completeGuess = true;
+            }
+        }
+        return completeGuess;
     }
 }

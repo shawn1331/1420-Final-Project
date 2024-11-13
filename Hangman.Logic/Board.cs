@@ -2,7 +2,7 @@ namespace Hangman.Logic;
 public class Board : IBoard
 {
     private int _maxGuesses;
-    private List<char> _pastGuesses;
+    public List<char> _pastGuesses;
 
 
     public Board(int maxGuesses)
@@ -33,6 +33,7 @@ public class Board : IBoard
     public void AddToGuesses(char guess)
     {
         _pastGuesses.Add(guess);
+        _maxGuesses--;
     }
 
     public void ShowPastGuesses()
