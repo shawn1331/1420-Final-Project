@@ -29,7 +29,6 @@ public class Word
             {
                 _guessedLetters[i] = letter;
                 correctGuess = true;
-                return correctGuess;
             }
         }
         return correctGuess;
