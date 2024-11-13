@@ -3,7 +3,7 @@ public class Word
 {
     private string _wordToGuess;
     private char[] _guessedLetters;
-    
+
     public Word(string word)
     {
         _wordToGuess = word.ToUpper();
@@ -22,7 +22,17 @@ public class Word
 
     public bool CheckGuess(char letter)
     {
-        return false;
+        bool correctGuess = false;
+        for (int i = 0; i < _wordToGuess.Length; i++)
+        {
+            if (_wordToGuess[i] == char.ToUpper(letter))
+            {
+                _guessedLetters[i] = letter;
+                correctGuess = true;
+                return correctGuess;
+            }
+        }
+        return correctGuess;
     }
 
     public bool CheckCompleteGuess(string word)
