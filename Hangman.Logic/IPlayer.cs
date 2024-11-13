@@ -1,6 +1,6 @@
 public interface IPlayer
 {
-   void AddToGuesses(char guess);
-   void ShowPastGuesses();
    abstract char MakeGuess();
+   abstract string MakeCompleteGuess();
+   int UpdateScore(int points);
 }

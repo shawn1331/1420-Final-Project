@@ -2,7 +2,7 @@ namespace Hangman.Logic;
 public class AIPlayer : Player
 {
 
-    public AIPlayer(string name, Game.GetGuessDelegate getGuess) : base(name, getGuess)
+    public AIPlayer(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) : base(name, getGuess, getCompleteGuess)
     {
 
     }
@@ -10,5 +10,10 @@ public class AIPlayer : Player
     public override char MakeGuess()
     {
         return default;
+    }
+
+    public override string MakeCompleteGuess()
+    {
+        return "";
     }
 }

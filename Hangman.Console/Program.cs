@@ -24,3 +24,23 @@ static char GetUserGuess()
         return GetUserGuess();
     }
 }
+
+static string GetUsersCompleteGuess()
+{
+    bool flagNonLetter = false;
+    Console.Write("What is your guess: ");
+    string completeGuess = Console.ReadLine().ToUpper();
+    foreach (char letter in completeGuess)
+    {
+        if (!char.IsAsciiLetter(letter))
+        {
+            flagNonLetter = true;
+        }
+        if (flagNonLetter)
+        {
+           Console.WriteLine("That guess contains invalid characters, try again.");
+           return GetUsersCompleteGuess(); 
+        }
+    }
+    return completeGuess;
+}

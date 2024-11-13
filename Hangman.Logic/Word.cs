@@ -19,4 +19,14 @@ public class Word
     {
         return false;
     }
+
+    public bool CheckGuess(char letter)
+    {
+        return false;
+    }
+
+    public bool CheckCompleteGuess(string word)
+    {
+        return false;
+    }
 }

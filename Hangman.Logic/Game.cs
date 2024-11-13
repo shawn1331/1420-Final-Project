@@ -7,11 +7,15 @@ public class Game
     private Word _word;
     private Board _board;
     private static Random _random;
+    public delegate char GetGuessDelegate();
+    public delegate string GetCompleteGuessDelegate();
     private int NumberOfPlayers { get; set; }
     private string GameName { get; set; }
-    public delegate char GetGuessDelegate();
 
-
+public Game()
+{
+    
+}
     public Game(Player p1, Player p2, string wordToGuess, int maxGuesses)
     {
         _player1 = p1;
