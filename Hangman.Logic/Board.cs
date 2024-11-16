@@ -1,52 +1,57 @@
 namespace Hangman.Logic;
 public class Board : IBoard
 {
-    private int _maxGuesses;
-    public List<char> _pastGuesses;
+    public int MaxMissedGuesses {get; private set;}
+    public List<char> _incorrectGuesses;
 
 
-    public Board(int maxGuesses)
+    public Board(int maxMissedGuesses = 6)
     {
-        _maxGuesses = maxGuesses;
-        _pastGuesses = new();
+        MaxMissedGuesses = maxMissedGuesses;
+        _incorrectGuesses = new();
     }
     public void PrintHangedMan()
     {
 
     }
 
-    public void PrintWord()
+    public void PrintWord(Word word)
     {
-
+        // Console.SetCursorPosition();
+        for (int i = 0; i < word.GuessedLetters.Length; i++)
+        {
+            Console.Write(word.GuessedLetters[i]);
+        }
     }
 
-    public void PrintPoints()
+    public void PrintPoints(Player player)
     {
-
+        // Console.SetCursorPosition();
+        Console.WriteLine(player.ToString());
     }
 
     public bool HasGuesses()
     {
-        return _maxGuesses > 0;
+        return MaxMissedGuesses > 0;
     }
 
-    public void AddToGuesses(char guess)
+    public void AddToMissedGuesses(char guess)
     {
-        _pastGuesses.Add(guess);
-        _maxGuesses--;
+        _incorrectGuesses.Add(guess);
+        MaxMissedGuesses--;
     }
 
     public void ShowPastGuesses()
     {
         Console.Write("These are the letters you have already tried: ");
 
-        for (int i = 0; i < _pastGuesses.Count; i++)
+        for (int i = 0; i < _incorrectGuesses.Count; i++)
         {
-            if (i == _pastGuesses.Count - 1)
+            if (i == _incorrectGuesses.Count - 1)
             {
-                Console.Write(_pastGuesses[i]);
+                Console.Write(_incorrectGuesses[i]);
             }
-            Console.Write(_pastGuesses[i] + ", ");
+            Console.Write(_incorrectGuesses[i] + ", ");
         }
     }
 }

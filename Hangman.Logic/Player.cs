@@ -21,8 +21,19 @@ public abstract class Player : IPlayer
         // Console.WriteLine($"{Name} has {Score} points");
     }
 
+    public override string ToString()
+    {
+        return $"{Name}, points: {Score}";
+    }
+
+    public void ResetPlayerScore(Player player)
+    {
+        player.Score = 0;
+    }
+
     public abstract char MakeGuess();
 
     public abstract string MakeCompleteGuess();
+
 
 }

@@ -12,23 +12,78 @@ public class Game
     private int NumberOfPlayers { get; set; }
     private string GameName { get; set; }
 
-public Game()
-{
+    public Game()
+    {
 
-}
-    public Game(Player p1, Player p2, string wordToGuess, int maxGuesses)
+    }
+    public Game(Player p1, Player p2, string wordToGuess, int maxMissedGuesses = 6)
     {
         _player1 = p1;
         _player2 = p2;
         _word = new Word(wordToGuess);
-        _board = new Board(maxGuesses);
+        _board = new Board(maxMissedGuesses);
         _currentPlayer = _player1;
         _random = new();
     }
 
-    public void PlayGame(char letter)
+    public void PlayGame()
     {
+        string wholeWordGuess = "";
+        char guess = ' ';
 
+        while (_board.HasGuesses() && !_word.CompletelyGuessed())
+        {
+            Console.Clear();
+            _board.PrintHangedMan();
+            _board.PrintWord(_word);
+            _board.PrintPoints(_currentPlayer);
+
+            if (_board._incorrectGuesses.Count == 0) ;
+
+            else
+                _board.ShowPastGuesses();
+
+            if (_word.RemainingLetterCount < _word.GuessedLetters.Length - 3)
+            {
+                int letterCount = _word.RemainingLetterCount;
+                wholeWordGuess = _currentPlayer.MakeCompleteGuess();
+
+                if (_word.CheckCompleteGuess(wholeWordGuess))
+                {
+                    Console.WriteLine("You guessed the rest of the word, Good Job!");
+                    _currentPlayer.UpdateScore(letterCount * 10);
+                }
+            }
+            else
+            {
+                guess = _currentPlayer.MakeGuess();
+
+                if (_word.CheckGuess(guess))
+                {
+                    Console.WriteLine("Correct guess!");
+                    _currentPlayer.UpdateScore(5);
+                }
+                else
+                {
+                    Console.WriteLine("The word does not contain that letter.");
+                    _board.AddToMissedGuesses(guess);
+                }
+            }
+
+            if (!_word.CompletelyGuessed())
+                _currentPlayer = _currentPlayer == _player1 ? _player2 : _player1;
+                
+                System.Threading.Thread.Sleep(1500);
+        }
+
+        if (!_word.CompletelyGuessed() && !_board.HasGuesses())
+        {
+            Console.WriteLine($"Game Over! The word was {_word.ToString()}");
+        }
+        else if (_word.CompletelyGuessed())
+        {
+            Console.WriteLine($"Congratulations {_currentPlayer.Name} you won! You have{_currentPlayer.Score}");
+        }
     }
 
     public string SelectWordToGuess()
@@ -57,5 +112,14 @@ public Game()
             19 => "acquiesce",
             20 => "requiem"
         };
+    }
+
+    public void ResetGameState(string word)
+    {
+        _board = new();
+        word = SelectWordToGuess();
+        _player1.ResetPlayerScore(_player1);
+        _player2.ResetPlayerScore(_player2);
+        _currentPlayer = _player1;
     }
 }

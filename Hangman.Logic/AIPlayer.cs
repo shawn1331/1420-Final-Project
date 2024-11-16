@@ -2,7 +2,7 @@ namespace Hangman.Logic;
 public class AIPlayer : Player
 {
 
-    public AIPlayer(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) : base(name, getGuess, getCompleteGuess)
+    public AIPlayer(Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, string name = "AI") : base(name, getGuess, getCompleteGuess)
     {
 
     }

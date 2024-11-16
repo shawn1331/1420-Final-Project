@@ -1,5 +1,30 @@
 ﻿// Shawn Miner Fall 2024 1420 Final Project Hangman
+using Hangman.Logic;
+Game getWordFromGame = new();
+string word = getWordFromGame.SelectWordToGuess();
+Player player1 = new HumanPlayer("Shawn", GetUserGuess, GetUsersCompleteGuess);
+Player player2 = new AIPlayer(GetUserGuess, GetUsersCompleteGuess);
+Game game = new(player1, player2, word);
+bool playAgain = true;
+Console.Clear();
 
+while (playAgain)
+{
+    game.PlayGame();
+
+    Console.WriteLine("Would you like to play again? y/n");
+    char loopAgain = Console.ReadKey().KeyChar;
+
+    if (loopAgain == 'y')
+        game.ResetGameState(word);
+
+
+    else
+        playAgain = false;
+}
+
+Console.Clear();
+Console.WriteLine("Thank you for playing!");
 
 
 
@@ -40,8 +65,8 @@ static string GetUsersCompleteGuess()
         }
         if (flagNonLetter)
         {
-           Console.WriteLine("That guess contains invalid characters, try again.");
-           return GetUsersCompleteGuess(); 
+            Console.WriteLine("That guess contains invalid characters, try again.");
+            return GetUsersCompleteGuess();
         }
     }
     return completeGuess;
