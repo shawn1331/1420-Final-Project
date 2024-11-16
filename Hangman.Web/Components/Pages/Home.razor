@@ -1,7 +1,68 @@
 ﻿@page "/"
+@using Hangman.Logic
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Welcome to Hangman</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Hangman Lobby</h1>
+@if (Lobby.OpenGames.Any())
+{
+    <h3>Choose An Open Game</h3>
+    <ul>
+        @foreach (var name in Lobby.OpenGames)
+        {
+            var game = Lobby.GetGame(name);
+            string players = $"{game.Player1.Name ?? "[Open]"} vs {game.Player2.Name ?? "[Open]"}";
+            <li>
+                <a href="/game/@game/">@game (@players)</a>
+            </li>
+        }
+    </ul>
+}
 
-Welcome to your new app.
+<h3>Create A New Game</h3>
+<input @bind=newGameName/> <button @onclick=createGame>Create Game</button>
+
+@if (Lobby.ActiveGames.Any())
+{
+    <h3>Active Games</h3>
+    <table style="width: 100%;" border>
+        <thead>
+            <tr>
+                <th></th>
+                <th colspan="2">Player 1</th>
+                <th colspan="2">Player 2</th>
+            </tr>
+            <tr>
+                <th>Game Name</th>
+                <th>Name</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activeGame in Lobby.ActiveGames)
+            {
+                <tr>
+                    <td>@activeGame.Name</td>
+                    <td>@activeGame.Game.Player1?.Name</td>
+                    <td>@activeGame.Game.Player2?.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    string newGameName;
+
+    void createGame()
+    {
+        bool result = Lobby.CreateGame(newGameName);
+        newGameName = null;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        Lobby.UpdateGameList += () => InvokeAsync(StateHasChanged);
+    }
+}

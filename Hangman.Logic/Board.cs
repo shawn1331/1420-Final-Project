@@ -1,5 +1,5 @@
-namespace Hangman.Logic;
-public class Board : IBoard
+namespace Hangman.Logic; 
+public class Board : IBoard  // inheritence
 {
     public int MaxMissedGuesses {get; private set;}
     public List<char> _incorrectGuesses;

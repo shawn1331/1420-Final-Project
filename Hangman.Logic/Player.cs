@@ -1,11 +1,11 @@
 namespace Hangman.Logic;
-public abstract class Player : IPlayer
+public abstract class Player : IPlayer // use of abstract class and inheritence
 {
     public int Score { get; private set; }
     public char Guess { get; private set; }
     public string Name { get; set; }
-    protected Game.GetGuessDelegate GetGuess; 
-    protected Game.GetCompleteGuessDelegate GetCompleteGuess;
+    protected Game.GetGuessDelegate GetGuess; // delegate variable
+    protected Game.GetCompleteGuessDelegate GetCompleteGuess;  // delegate variable
 
     public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess)
     {
@@ -21,7 +21,7 @@ public abstract class Player : IPlayer
         // Console.WriteLine($"{Name} has {Score} points");
     }
 
-    public override string ToString()
+    public override string ToString()  // polymorphism/ overridden method
     {
         return $"{Name}, points: {Score}";
     }
@@ -31,9 +31,9 @@ public abstract class Player : IPlayer
         player.Score = 0;
     }
 
-    public abstract char MakeGuess();
+    public abstract char MakeGuess();  // abstract method definition
 
-    public abstract string MakeCompleteGuess();
+    public abstract string MakeCompleteGuess();  // abstract method definition
 
 
 }

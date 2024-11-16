@@ -1,10 +1,12 @@
 ﻿// Shawn Miner Fall 2024 1420 Final Project Hangman
 using Hangman.Logic;
+
 Game getWordFromGame = new();
 string word = getWordFromGame.SelectWordToGuess();
 Player player1 = new HumanPlayer("Shawn", GetUserGuess, GetUsersCompleteGuess);
 Player player2 = new AIPlayer(GetUserGuess, GetUsersCompleteGuess);
 Game game = new(player1, player2, word);
+
 bool playAgain = true;
 Console.Clear();
 
