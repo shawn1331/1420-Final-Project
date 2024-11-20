@@ -1,19 +1,14 @@
 ﻿namespace Hangman.Logic;
 public class Game
 {
-    public Player? Player1 {get; private set;}
-    public Player? Player2 {get; private set;}
-    public Player? CurrentPlayer {get; private set;}
-    public Word Word {get; private set;}
-    public Board Board {get; private set;}
-    public static Random _random;
+    public Player? Player1 { get; private set; }
+    public Player? Player2 { get; private set; }
+    public Player? CurrentPlayer { get; private set; }
+    public Word Word { get; private set; }
+    public Board Board { get; private set; }
+    public static Random _random = new();
     public delegate char GetGuessDelegate(); // delegate creation
     public delegate string GetCompleteGuessDelegate();  // delegate creation
-    // below is properties used for the Blazor web UI
-    public int NumberOfPlayers { get; private set; }
-    public int MaxPlayers {get; private set;}
-    public string GameName { get; private set; }
-    public bool IsFull => NumberOfPlayers == MaxPlayers;
     public event Action? GameStateChanged;
     public event Action? GameReset;
 
@@ -21,14 +16,13 @@ public class Game
     {
 
     }
-    public Game(Player p1, Player p2, string wordToGuess, int maxMissedGuesses = 6)
+    public Game(Player p1, Player p2, string wordToGuess)
     {
         Player1 = p1;
         Player2 = p2;
         Word = new Word(wordToGuess);
-        Board = new Board(maxMissedGuesses);
         CurrentPlayer = Player1;
-        _random = new();
+        Board = new();
     }
 
     public void PlayGame()
@@ -36,21 +30,19 @@ public class Game
         string wholeWordGuess = "";
         char guess = ' ';
 
-        while (Board.HasGuesses() && !Word.CompletelyGuessed())
+        while (Board.BoardHasGuesses() && !Word.CompletelyGuessed())
         {
             Console.Clear();
             Board.PrintHangedMan();
             Board.PrintWord(Word);
             Board.PrintPoints(CurrentPlayer);
 
-            if (Board._incorrectGuesses.Count == 0) ;
+            if (CurrentPlayer.IncorrectGuesses.Count != 0)
+                CurrentPlayer.ShowPastGuesses();
 
-            else
-                Board.ShowPastGuesses();
-
-            if (Word.RemainingLetterCount < Word.GuessedLetters.Length - 3)
+            int letterCount = Word.RemainingLetterCount;
+            if (Word.RemainingLetterCount <= Word.GuessedLetters.Length - 3)
             {
-                int letterCount = Word.RemainingLetterCount;
                 wholeWordGuess = CurrentPlayer.MakeCompleteGuess();
 
                 if (Word.CheckCompleteGuess(wholeWordGuess))
@@ -71,7 +63,7 @@ public class Game
                 else
                 {
                     Console.WriteLine("The word does not contain that letter.");
-                    Board.AddToMissedGuesses(guess);
+                    CurrentPlayer.AddToMissedGuesses(guess);
                 }
             }
 
@@ -81,17 +73,17 @@ public class Game
             System.Threading.Thread.Sleep(1500);
         }
 
-        if (!Word.CompletelyGuessed() && !Board.HasGuesses())
+        if (!Word.CompletelyGuessed() && !Board.BoardHasGuesses())
         {
-            Console.WriteLine($"Game Over! The word was {Word.ToString()}");
+            Console.WriteLine($"Game Over! The word was {Word.ToString}");
         }
         else if (Word.CompletelyGuessed())
         {
-            Console.WriteLine($"Congratulations {CurrentPlayer.Name} you won! You have{CurrentPlayer.Score}");
+            Console.WriteLine($"Congratulations {CurrentPlayer.Name} you won! You have{CurrentPlayer.Score}. The word was {Word.ToString}");
         }
     }
 
-    public string SelectWordToGuess()
+    public static string SelectWordToGuess()
     {
         return _random.Next(0, 21) switch
         {
@@ -119,12 +111,28 @@ public class Game
         };
     }
 
-    public void ResetGameState(string word)
+    public void ResetGameState(string wordToGuess)
     {
         Board = new();
-        word = SelectWordToGuess();
-        Player1.ResetPlayerScore(Player1);
-        Player2.ResetPlayerScore(Player2);
+        Player1?.ResetPlayerScore();
+        Player2?.ResetPlayerScore();
         CurrentPlayer = Player1;
+        Word = new(wordToGuess);
+    }
+
+    public void Join(Player player)
+    {
+        if (Player1 == null)
+        {
+            Player1 = player;
+        }
+        else if (Player2 == null)
+        {
+            Player2 = player;
+        }
+        else
+            throw new GameFullException();
+
+        GameStateChanged?.Invoke();
     }
 }

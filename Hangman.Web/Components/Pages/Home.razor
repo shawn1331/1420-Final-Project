@@ -11,9 +11,9 @@
         @foreach (var name in Lobby.OpenGames)
         {
             var game = Lobby.GetGame(name);
-            string players = $"{game.Player1.Name ?? "[Open]"} vs {game.Player2.Name ?? "[Open]"}";
+            string players = $"{game?.Player1?.Name ?? "[Open]"} vs {game?.Player2?.Name ?? "[Open]"}";
             <li>
-                <a href="/game/@game/">@game (@players)</a>
+                <a href="/game/@name/">@name (@players)</a>
             </li>
         }
     </ul>
@@ -63,6 +63,6 @@
 
     protected override void OnInitialized()
     {
-        Lobby.UpdateGameList += () => InvokeAsync(StateHasChanged);
+        Lobby.LobbyChanged += () => InvokeAsync(StateHasChanged);
     }
 }

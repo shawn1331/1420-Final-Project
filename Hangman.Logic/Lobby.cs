@@ -2,7 +2,7 @@ namespace Hangman.Logic;
 
 public static class Lobby  // use of a static class
 {
-    public static event Action? UpdateGameList;
+    public static event Action? LobbyChanged;
     public static Dictionary<string, Game?> GamesList { get; private set; } = new();
     public static IEnumerable<(string Name, Game? Game)> ActiveGames => GamesList
         .Where(x => x.Value.Player2 is not null && x.Value.Word.CompletelyGuessed() is false)
@@ -18,8 +18,8 @@ public static class Lobby  // use of a static class
         bool gameAdded = GamesList.TryAdd(gameName, newGame);
         if (gameAdded)
         {
-            UpdateGameList?.Invoke();
-            newGame.GameStateChanged += () => UpdateGameList?.Invoke();
+            LobbyChanged?.Invoke();
+            newGame.GameStateChanged += () => LobbyChanged?.Invoke();
         }
         return gameAdded;
     }
@@ -27,10 +27,5 @@ public static class Lobby  // use of a static class
     public static Game? GetGame(string gameName)
     {
         return GamesList.ContainsKey(gameName) ? GamesList[gameName] : null;
-    }
-
-    public static void FireUpdateGameList()  // static method
-    {
-        UpdateGameList?.Invoke();
     }
 }

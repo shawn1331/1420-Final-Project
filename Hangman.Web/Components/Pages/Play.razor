@@ -1,14 +1,117 @@
-@page "/play"
+@page "/play/{GameName}"
 @using Hangman.Logic
 @inject NavigationManager navManager
 
+<PageTitle>Hangman</PageTitle>
+
+@if (playerMe == null)
+{
+    <p>There Is No Other Player @PlayerName</p>
+}
+else if (game.Word.CompletelyGuessed())
+{
+    <h3>Game Over</h3>
+    if (game?.Player1?.MaxMissedGuesses == 0 && game?.Player2?.MaxMissedGuesses == 0)
+    {
+        <p>It's A Tie!</p>
+    }
+    else if (game?.Player2?.Score > game?.Player1?.Score)
+    {
+        <p>You Lose @game.Player1.Name!</p>
+    }
+    else
+    {
+        <p>You Win @game.Player1.Name!</p>
+    }
+}
+else
+{
+    <p>Remaining Guesses: @game?.Player1?.MaxMissedGuesses</p>
+    <img src="@getImagePathPlayer1()" alt=""/>
+
+
+}
 
 
 
 
+@code {
+    [Parameter]
+    public string GameName { get; set; }
 
-@code{
+    Player? playerMe;
+    Player? playerOther;
+    Game game;
+
+    [SupplyParameterFromQuery]
+    public string PlayerName { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        game = Lobby.GetGame(GameName);
+
+        if (game == null)
+            navManager.NavigateTo("/");
+
+        if (game?.Player1?.Name == PlayerName)
+            playerMe = game.Player1;
+
+        else if (game?.Player2?.Name == PlayerName)
+            playerMe = game.Player2;
+
+        playerOther = playerMe == game?.Player1 ? game?.Player2 : game?.Player1;
+        game = new(playerMe,playerOther, Game.SelectWordToGuess());
 
 
-    
+        game.GameStateChanged += handleGameStateChanged;
+    }
+
+    void makeGuess()
+    {
+
+    }
+
+    void handleGameStateChanged()
+    {
+        if (playerOther == null)
+            playerOther = playerMe == game.Player1 ? game.Player2 : game.Player1;
+
+        InvokeAsync(StateHasChanged);
+
+        game.GameReset += () => navManager.NavigateTo("/");
+
+    }
+
+    void playAgain()
+    {
+        game.ResetGameState(Game.SelectWordToGuess());
+    }
+
+    string getImagePathPlayer1()
+    {
+        return game?.Player1?.MaxMissedGuesses switch
+        {
+            6 => "/hang0.bmp",
+            5 => "/hang1.bmp",
+            4 => "/hang2.bmp",
+            3 => "/hang3.bmp",
+            2 => "/hang4.bmp",
+            1 => "/hang5.bmp",
+            0 => "/hang6.bmp",
+        };
+    }
+
+    string getImagePathPlayer2()
+    {
+        return game?.Player2?.MaxMissedGuesses switch
+        {
+            6 => "/hang0.bmp",
+            5 => "/hang1.bmp",
+            4 => "/hang2.bmp",
+            3 => "/hang3.bmp",
+            2 => "/hang4.bmp",
+            1 => "/hang5.bmp",
+            0 => "/hang6.bmp",
+        };
+    }
 }

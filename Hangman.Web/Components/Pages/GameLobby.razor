@@ -1,0 +1,84 @@
+@page "/game/{GameName}"
+@using Hangman.Logic
+@inject NavigationManager navManager
+
+<PageTitle> @GameName -- Hangman</PageTitle>
+
+<h1>Game Name: @GameName</h1>
+
+@if (game.Player2 == null)
+{
+    <input @bind=newPlayerName placeholder="Your Name" />
+    <button @onclick=joinGame>Join Game</button>
+}
+
+else
+{
+    <p> Sorry Looks Like This Game Is Already Full</p>
+    <p> @game.Player1.Name Is Playing @game.Player2.Name</p>
+}
+
+
+
+
+
+
+@code {
+
+    [Parameter]
+    public string? GameName { get; set; }
+    string? newPlayerName;
+    Game? game = new();
+    string word = Game.SelectWordToGuess();
+    
+    void joinGame()
+    {
+        game.Join(new HumanPlayer(newPlayerName, GetUserGuess, GetUsersCompleteGuess, word));
+        navManager.NavigateTo($"/play/{GameName}/?playername={newPlayerName}");
+    }
+
+    protected override void OnParametersSet()
+    {
+        game = Lobby.GetGame(GameName);
+        game.GameStateChanged += () => InvokeAsync(StateHasChanged);
+    }
+
+    static char GetUserGuess()
+    {
+        Console.WriteLine("Please enter the letter you would like to guess: ");
+        char userGuess = Console.ReadKey().KeyChar;
+
+        if (char.IsAsciiLetter(userGuess))
+            return userGuess;
+
+        else
+        {
+            Console.WriteLine("That is an invalid entry. Please try again.");
+            return GetUserGuess();
+        }
+    }
+
+    static string GetUsersCompleteGuess()
+    {
+        bool flagNonLetter = false;
+        Console.Write("What is your guess: ");
+        string completeGuess = Console.ReadLine().ToUpper();
+
+        if (string.IsNullOrWhiteSpace(completeGuess))
+            return GetUsersCompleteGuess();
+
+        foreach (char letter in completeGuess)
+        {
+            if (!char.IsAsciiLetter(letter))
+            {
+                flagNonLetter = true;
+            }
+            if (flagNonLetter)
+            {
+                Console.WriteLine("That guess contains invalid characters, try again.");
+                return GetUsersCompleteGuess();
+            }
+        }
+        return completeGuess;
+    }
+}

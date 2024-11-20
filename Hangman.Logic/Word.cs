@@ -1,7 +1,7 @@
 namespace Hangman.Logic;
 public class Word
 {
-    private string _wordToGuess;
+    public string WordToGuess {get; private set;}
     public char[] GuessedLetters { get; private set; }
     private int _remainingLetterCount;
     public int RemainingLetterCount
@@ -29,26 +29,26 @@ public class Word
 
     public Word(string word)
     {
-        _wordToGuess = word.ToUpper();
-        GuessedLetters = new string('_', _wordToGuess.Length).ToCharArray();
+        WordToGuess = word.ToUpper();
+        GuessedLetters = new string('_', WordToGuess.Length).ToCharArray();
     }
 
     public override string ToString()
     {
-        return _wordToGuess;
+        return WordToGuess;
     }
 
     public bool CompletelyGuessed()
     {
-        return new string(GuessedLetters) == _wordToGuess;
+        return new string(GuessedLetters) == WordToGuess;
     }
 
     public bool CheckGuess(char letter)
     {
         bool correctGuess = false;
-        for (int i = 0; i < _wordToGuess.Length; i++)
+        for (int i = 0; i < WordToGuess.Length; i++)
         {
-            if (_wordToGuess[i] == char.ToUpper(letter))
+            if (WordToGuess[i] == char.ToUpper(letter))
             {
                 GuessedLetters[i] = letter;
                 correctGuess = true;
@@ -60,21 +60,22 @@ public class Word
     public bool CheckCompleteGuess(string word)
     {
         Console.WriteLine("Would you like to try to guess the rest of the word? y/n");
-        char guessRestOfWord = Console.ReadKey().KeyChar;
+        char guessRestOfWord = Console.ReadKey(true).KeyChar;
 
         if (guessRestOfWord == 'y')
         {
             bool completeGuess = false;
-            if (word.Length < _wordToGuess.Length)
+            if (word.Length < WordToGuess.Length || word.Length > WordToGuess.Length)
             {
+                Console.WriteLine("That word was longer/shorter than the word your trying to guess. Try again next time.");
                 return completeGuess;
             }
 
             string guess = word.ToUpper();
 
-            for (int i = 0; i < _wordToGuess.Length; i++)
+            for (int i = 0; i < WordToGuess.Length; i++)
             {
-                if (_wordToGuess[i] == guess[i])
+                if (WordToGuess[i] == guess[i])
                 {
                     GuessedLetters[i] = guess[i];
                     completeGuess = true;
