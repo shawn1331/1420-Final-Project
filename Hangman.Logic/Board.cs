@@ -3,10 +3,12 @@ public class Board : IBoard  // inheritence
 {
     public int MaxMissedGuesses { get; private set; }
 
-
+    public List<char> IncorrectGuesses { get; private set; }
     public Board()
     {
-    }   
+        IncorrectGuesses = new();
+        MaxMissedGuesses = 6;
+    }
 
     public bool BoardHasGuesses() => MaxMissedGuesses > 0;
     public void PrintHangedMan()

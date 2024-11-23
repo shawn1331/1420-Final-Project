@@ -30,6 +30,8 @@ public abstract class Player : IPlayer // use of abstract class and inheritence
         return MaxMissedGuesses > 0;
     }
 
+    public void RemoveAGuess() => MaxMissedGuesses--;
+
     public override string ToString()  // polymorphism/ overridden method
     {
         return $"{Name}, points: {Score}";

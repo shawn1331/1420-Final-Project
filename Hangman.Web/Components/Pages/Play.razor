@@ -6,30 +6,82 @@
 
 @if (playerMe == null)
 {
-    <p>There Is No Other Player @PlayerName</p>
+    <p>Waiting for the opponent to join...</p>
 }
-else if (game.Word.CompletelyGuessed())
+else if (!playerMe.Word.CompletelyGuessed() && !playerMe.HasGuesses() &&
+         !playerOther.Word.CompletelyGuessed() && !playerOther.HasGuesses())
 {
     <h3>Game Over</h3>
-    if (game?.Player1?.MaxMissedGuesses == 0 && game?.Player2?.MaxMissedGuesses == 0)
+    if (playerMe.Score == playerOther.Score)
     {
         <p>It's A Tie!</p>
     }
-    else if (game?.Player2?.Score > game?.Player1?.Score)
+    else if (playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score ||
+             playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score)
     {
-        <p>You Lose @game.Player1.Name!</p>
+        <p>You Win @playerMe.Name!</p>
     }
     else
     {
-        <p>You Win @game.Player1.Name!</p>
+        <p>You Lose @playerMe.Name!</p>
+    }
+}
+else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
+{
+    if (playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score ||
+        playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score)
+    {
+        <p>You Win @playerMe.Name!</p>
+    }
+    else
+    {
+        <p>You Lose @playerMe.Name!</p>
     }
 }
 else
 {
-    <p>Remaining Guesses: @game?.Player1?.MaxMissedGuesses</p>
-    <img src="@getImagePathPlayer1()" alt=""/>
+    <div class="game-container">
+        <div class="player-left">
+            <h3>Player: @playerMe.Name</h3>
+            <p>Score: @playerMe.Score</p>
+            <img src="@getImagePath(playerMe)" alt="Hangman State" />
+            @foreach(char letter in playerMe.Word.GuessedLetters)
+            {
+            <p>Word: @letter </p>
+            }
+        </div>
 
+        <div class="game-board">
+            <h1>Make Your Guess!</h1>
+            <p>Remaining Guesses: @playerMe.MaxMissedGuesses</p>
+            <input type="text" @bind="guess" maxlength="1" placeholder="Guess Letter" />
+            <button @onclick="() => makeGuess(playerMe, guess)">Check Guess</button>
+            @if(playerMe.Word.RemainingLetterCount <= playerMe.Word.WordToGuess.Length - 3)
+            {
+                <input type="text" @bind="guess" maxlength=  placeholder="Guess Word"/>
+                <button @onclick="() => makeCompleteGuess(playerMe, guess)">Check Word Guess</button>
+            }
+        </div>
 
+        <div class="player-right">
+            <h3>Opponent: @playerOther.Name</h3>
+            <p>Score: @playerOther.Score</p>
+            <img src="@getImagePath(playerOther)" alt="Hangman State" />
+            @foreach(char letter in playerOther.Word.GuessedLetters)
+            {
+            <p>Word Progress:
+                @if(letter == '_')
+                {
+                    <span>_ </span>
+                }
+                else
+                {
+                    <span>? </span>
+                } 
+            </p>
+            }
+        </div>
+    </div>
 }
 
 
@@ -45,6 +97,7 @@ else
 
     [SupplyParameterFromQuery]
     public string PlayerName { get; set; }
+    string guess;
 
     protected override void OnParametersSet()
     {
@@ -60,15 +113,35 @@ else
             playerMe = game.Player2;
 
         playerOther = playerMe == game?.Player1 ? game?.Player2 : game?.Player1;
-        game = new(playerMe,playerOther, Game.SelectWordToGuess());
-
+        game = new(playerMe, playerOther, Game.SelectWordToGuess());
 
         game.GameStateChanged += handleGameStateChanged;
     }
 
-    void makeGuess()
+    void makeGuess(Player player, string guess)
     {
+        if (player.Word.CheckGuess(guess[0]))
+        {
+            player.UpdateScore(5);
+        }
+        else
+        {
+            player.AddToMissedGuesses(guess[0]);
+        }
+        InvokeAsync(StateHasChanged);
+    }
 
+    void makeCompleteGuess(Player player, string guess)
+    {
+        if (player.Word.CheckCompleteGuess(guess))
+        {
+            player.UpdateScore(player.Word.RemainingLetterCount * 10);
+        }
+        else
+        {
+            player.RemoveAGuess();
+        }
+        InvokeAsync(StateHasChanged);
     }
 
     void handleGameStateChanged()
@@ -87,23 +160,9 @@ else
         game.ResetGameState(Game.SelectWordToGuess());
     }
 
-    string getImagePathPlayer1()
+    string getImagePath(Player player)
     {
-        return game?.Player1?.MaxMissedGuesses switch
-        {
-            6 => "/hang0.bmp",
-            5 => "/hang1.bmp",
-            4 => "/hang2.bmp",
-            3 => "/hang3.bmp",
-            2 => "/hang4.bmp",
-            1 => "/hang5.bmp",
-            0 => "/hang6.bmp",
-        };
-    }
-
-    string getImagePathPlayer2()
-    {
-        return game?.Player2?.MaxMissedGuesses switch
+        return player?.MaxMissedGuesses switch
         {
             6 => "/hang0.bmp",
             5 => "/hang1.bmp",

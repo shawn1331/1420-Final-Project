@@ -40,7 +40,7 @@ public class Game
             if (CurrentPlayer.IncorrectGuesses.Count != 0)
                 CurrentPlayer.ShowPastGuesses();
 
-            int letterCount = Word.RemainingLetterCount;
+            int missingLetterCount = Word.RemainingLetterCount;
             if (Word.RemainingLetterCount <= Word.GuessedLetters.Length - 3)
             {
                 wholeWordGuess = CurrentPlayer.MakeCompleteGuess();
@@ -48,7 +48,7 @@ public class Game
                 if (Word.CheckCompleteGuess(wholeWordGuess))
                 {
                     Console.WriteLine("You guessed the rest of the word, Good Job!");
-                    CurrentPlayer.UpdateScore(letterCount * 10);
+                    CurrentPlayer.UpdateScore(missingLetterCount * 10);
                 }
             }
             else
@@ -79,7 +79,7 @@ public class Game
         }
         else if (Word.CompletelyGuessed())
         {
-            Console.WriteLine($"Congratulations {CurrentPlayer.Name} you won! You have{CurrentPlayer.Score}. The word was {Word.ToString}");
+            Console.WriteLine($"Congratulations {CurrentPlayer.Name} you won! You have{CurrentPlayer.Score} points. The word was {Word.ToString}");
         }
     }
 
