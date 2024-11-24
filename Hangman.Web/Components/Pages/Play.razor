@@ -1,6 +1,7 @@
 @page "/play/{GameName}"
 @using Hangman.Logic
 @inject NavigationManager navManager
+@using System.Text.Json
 
 <PageTitle>Hangman</PageTitle>
 
@@ -11,7 +12,7 @@
 else if (!playerMe.Word.CompletelyGuessed() && !playerMe.HasGuesses() &&
          !playerOther.Word.CompletelyGuessed() && !playerOther.HasGuesses())
 {
-    <h3>Game Over</h3>
+    <h3>Game Over!</h3>
     if (playerMe.Score == playerOther.Score)
     {
         <p>It's A Tie!</p>
@@ -25,11 +26,16 @@ else if (!playerMe.Word.CompletelyGuessed() && !playerMe.HasGuesses() &&
     {
         <p>You Lose @playerMe.Name!</p>
     }
+        scores.Add(new ScoreBoard(game.Player1.Name, game.Player1.Score));
+        scores.Add(new ScoreBoard(game.Player2.Name, game.Player2.Score));
+        string json = JsonSerializer.Serialize(scores);
+        File.WriteAllText(filePath,json);
 }
 else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
 {
-    if (playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score ||
-        playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score)
+    <h3>Game Over!</h3>
+    if ((playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score) ||
+        (playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score))
     {
         <p>You Win @playerMe.Name!</p>
     }
@@ -37,6 +43,10 @@ else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed
     {
         <p>You Lose @playerMe.Name!</p>
     }
+        scores.Add(new ScoreBoard(game.Player1.Name, game.Player1.Score));
+        scores.Add(new ScoreBoard(game.Player2.Name, game.Player2.Score));
+        string json = JsonSerializer.Serialize(scores);
+        File.WriteAllText(filePath,json);
 }
 else
 {
@@ -45,10 +55,20 @@ else
             <h3>Player: @playerMe.Name</h3>
             <p>Score: @playerMe.Score</p>
             <img src="@getImagePath(playerMe)" alt="Hangman State" />
+            <p>Word:
             @foreach(char letter in playerMe.Word.GuessedLetters)
             {
-            <p>Word: @letter </p>
+             <span>@char.ToUpper(letter)</span> <span> </span>
             }
+            </p>
+            <br>
+            <br>
+            <p>Missed Guesses:
+            @foreach(char letter in playerMe.IncorrectGuesses)
+            {
+                <span>@letter</span> <span> </span>
+            }
+            </p>
         </div>
 
         <div class="game-board">
@@ -56,10 +76,11 @@ else
             <p>Remaining Guesses: @playerMe.MaxMissedGuesses</p>
             <input type="text" @bind="guess" maxlength="1" placeholder="Guess Letter" />
             <button @onclick="() => makeGuess(playerMe, guess)">Check Guess</button>
-            @if(playerMe.Word.RemainingLetterCount <= playerMe.Word.WordToGuess.Length - 3)
+            <br>
+            @if(playerMe.Word.RemainingLetterCount <= playerMe.Word.WordToGuess.Length - 4)
             {
-                <input type="text" @bind="guess" maxlength=  placeholder="Guess Word"/>
-                <button @onclick="() => makeCompleteGuess(playerMe, guess)">Check Word Guess</button>
+                <input type="text" @bind="completeGuess" maxlength=  placeholder="Guess Word"/>
+                <button @onclick="() => makeCompleteGuess(playerMe, completeGuess)">Check Word Guessed</button>
             }
         </div>
 
@@ -67,9 +88,9 @@ else
             <h3>Opponent: @playerOther.Name</h3>
             <p>Score: @playerOther.Score</p>
             <img src="@getImagePath(playerOther)" alt="Hangman State" />
+            <p>Word Progress:
             @foreach(char letter in playerOther.Word.GuessedLetters)
             {
-            <p>Word Progress:
                 @if(letter == '_')
                 {
                     <span>_ </span>
@@ -78,8 +99,16 @@ else
                 {
                     <span>? </span>
                 } 
-            </p>
             }
+            </p>
+            <br>
+            <br>
+            <p> Missed Guesses:
+            @foreach(char letter in playerOther.IncorrectGuesses)
+            {
+                <span>? </span>
+            }
+            </p>
         </div>
     </div>
 }
@@ -97,7 +126,11 @@ else
 
     [SupplyParameterFromQuery]
     public string PlayerName { get; set; }
-    string guess;
+    string? guess;
+    string? completeGuess;
+    @* string? word = Game.SelectWordToGuess(); *@
+    List<ScoreBoard> scores = new();
+        const string filePath = "/wwwroot/data/scoreboard.json";
 
     protected override void OnParametersSet()
     {
@@ -116,32 +149,38 @@ else
         game = new(playerMe, playerOther, Game.SelectWordToGuess());
 
         game.GameStateChanged += handleGameStateChanged;
+        playerMe.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
+        playerOther.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
     }
 
     void makeGuess(Player player, string guess)
     {
         if (player.Word.CheckGuess(guess[0]))
         {
-            player.UpdateScore(5);
+            player.UpdateScore(5 * player.Word.NumberOfGuessedLetters);
         }
         else
         {
             player.AddToMissedGuesses(guess[0]);
         }
-        InvokeAsync(StateHasChanged);
+        @* player.Word.WordHasChanged += () => InvokeAsync(StateHasChanged); *@
+        guess = string.Empty;
     }
 
-    void makeCompleteGuess(Player player, string guess)
+    void makeCompleteGuess(Player player, string completeGuess)
     {
-        if (player.Word.CheckCompleteGuess(guess))
+        int remainingLetterCount = player.Word.RemainingLetterCount;
+        if (player.Word.CheckCompleteGuess(completeGuess))
         {
-            player.UpdateScore(player.Word.RemainingLetterCount * 10);
+            player.UpdateScore(remainingLetterCount * 10);
         }
         else
         {
             player.RemoveAGuess();
         }
-        InvokeAsync(StateHasChanged);
+
+        
+        completeGuess = string.Empty;
     }
 
     void handleGameStateChanged()

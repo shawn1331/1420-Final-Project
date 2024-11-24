@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Hangman.Logic
+@using System.Text.Json
 
 <PageTitle>Welcome to Hangman</PageTitle>
 
@@ -20,7 +21,7 @@
 }
 
 <h3>Create A New Game</h3>
-<input @bind=newGameName/> <button @onclick=createGame>Create Game</button>
+<input @bind=newGameName /> <button @onclick=createGame>Create Game</button>
 
 @if (Lobby.ActiveGames.Any())
 {
@@ -51,8 +52,46 @@
     </table>
 }
 
+
+<hr />
+
+<div class="scoreboard">
+    <h2>Score Board</h2>
+    <table class="scoreboard-table">
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (scores.Count > 0)
+            {
+                @foreach (var score in scores)
+                {
+                    <tr>
+                        <td>@score.Name</td>
+                        <td>@score.Score</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" style="text-align: center;">No scores available</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
 @code {
+
     string newGameName;
+
+    List<ScoreBoard> scores = new();
+    const string filePath = "/wwwroot/data/scoreboard.json";
 
     void createGame()
     {
@@ -64,5 +103,10 @@
     protected override void OnInitialized()
     {
         Lobby.LobbyChanged += () => InvokeAsync(StateHasChanged);
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText("/wwwroot/data/scoreboard.json");
+            var scores = JsonSerializer.Deserialize<List<ScoreBoard>>(json);
+        }
     }
 }

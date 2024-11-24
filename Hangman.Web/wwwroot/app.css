@@ -36,3 +36,145 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+
+/* Parent container styles */
+.game-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px; /* Space between players */
+    padding: 15px;
+    background-color: #fafafa; /* Light gray background for the container */
+    border-radius: 8px; /* Slightly rounded corners */
+}
+
+/* Individual player sections */
+.player-section {
+    flex: 1; /* Equal width for both sections */
+    padding: 15px;
+    border: 1px solid #ddd; /* Soft border */
+    border-radius: 8px;
+    background-color: #fff; /* White background for player sections */
+}
+
+/* Styling for specific players */
+.player-me {
+    background-color: #e6f7ff; /* Light blue background for PlayerMe */
+    border-left: 4px solid #80c0ff; /* Blue border on the left for PlayerMe */
+}
+
+.player-other {
+    background-color: #ffe6e6; /* Light red background for PlayerOther */
+    border-left: 4px solid #ffcccc; /* Red border on the left for PlayerOther */
+}
+
+/* Guessing Buttons (subtle color scheme) */
+.guess-button {
+    background-color: #4CAF50; /* Soft green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.guess-button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+}
+
+.guess-button:active {
+    background-color: #388e3c; /* Even darker green on click */
+}
+
+/* Input field for guesses */
+.guess-input input {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 10px 0;
+    width: 60px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+.guess-input input:focus {
+    border-color: #80c0ff; /* Blue border when focused */
+    outline: none; /* Remove default focus outline */
+}
+
+/* Missed guesses section */
+.missed-guesses {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #d32f2f; /* Subtle red color for missed guesses */
+    font-weight: normal;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column; /* Stack players vertically on small screens */
+    }
+
+    .player-section {
+        width: 100%; /* Full width */
+        margin-bottom: 15px; /* Add some space between sections */
+    }
+}
+
+
+
+
+
+
+/* Style the scoreboard section */
+.scoreboard {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scoreboard h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.scoreboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scoreboard-table th,
+.scoreboard-table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.scoreboard-table th {
+    background-color: #d3d3d3; /* Light gray color */
+    color: #333; /* Dark text for contrast */
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+
+.scoreboard-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+
+
+
+

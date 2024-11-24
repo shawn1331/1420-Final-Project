@@ -1,17 +1,14 @@
 namespace Hangman.Logic;
 public class Word
 {
-    public string WordToGuess {get; private set;}
+    public string WordToGuess { get; private set; }
     public char[] GuessedLetters { get; private set; }
     private int _remainingLetterCount;
+    public int NumberOfGuessedLetters { get; private set; }
+    public event Action? WordHasChanged;
     public int RemainingLetterCount
     {
         get
-        {
-            return _remainingLetterCount;
-        }
-
-        private set
         {
             int count = 0;
 
@@ -23,8 +20,8 @@ public class Word
                 }
             }
             _remainingLetterCount = count;
+            return _remainingLetterCount;
         }
-
     }
 
     public Word(string word)
@@ -45,6 +42,7 @@ public class Word
 
     public bool CheckGuess(char letter)
     {
+        NumberOfGuessedLetters = 0;
         bool correctGuess = false;
         for (int i = 0; i < WordToGuess.Length; i++)
         {
@@ -52,8 +50,10 @@ public class Word
             {
                 GuessedLetters[i] = letter;
                 correctGuess = true;
+                NumberOfGuessedLetters++;
             }
         }
+        WordHasChanged.Invoke();
         return correctGuess;
     }
 
@@ -79,6 +79,7 @@ public class Word
                 {
                     GuessedLetters[i] = guess[i];
                     completeGuess = true;
+                    WordHasChanged?.Invoke();
                 }
             }
             return completeGuess;

@@ -25,6 +25,8 @@ public class Game
         Board = new();
     }
 
+    public void FireGameStateChanged() => GameStateChanged.Invoke();
+
     public void PlayGame()
     {
         string wholeWordGuess = "";
@@ -118,6 +120,7 @@ public class Game
         Player2?.ResetPlayerScore();
         CurrentPlayer = Player1;
         Word = new(wordToGuess);
+        GameReset?.Invoke();
     }
 
     public void Join(Player player)
