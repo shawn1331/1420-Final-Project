@@ -1,18 +1,18 @@
 namespace Hangman.Logic;
 public class HumanPlayer : Player  //inheritence
 {
-    public HumanPlayer(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, string wordToGuess) : base(name, getGuess, getCompleteGuess, wordToGuess)  // chaining constructor from base class
+    public HumanPlayer(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) : base(name, getGuess, getCompleteGuess)  // chaining constructor from base class
     {
         
     }
 
     public override char MakeGuess()  // polymorphism/ overridden method
     {
-        return GetGuess();
+        return GetGuess();   // using the delegate variables 
     }
 
     public override string MakeCompleteGuess()  // polymorphism/ overridden method
     {
-        return GetCompleteGuess();
+        return GetCompleteGuess();  // using the delegate variables
     }
 }

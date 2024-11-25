@@ -1,7 +1,7 @@
 namespace Hangman.Logic;
 
 [Serializable]
-internal class GameFullException : Exception
+internal class GameFullException : Exception // creation of a new exception type to throw exceptions when the game is full
 {
     public GameFullException()
     {

@@ -29,11 +29,11 @@ else
     public string? GameName { get; set; }
     string? newPlayerName;
     Game? game = new();
-    string word = Game.SelectWordToGuess();
-    
+    string word { get; set; } = Game.SelectWordToGuess();
+
     void joinGame()
     {
-        game.Join(new HumanPlayer(newPlayerName, GetUserGuess, GetUsersCompleteGuess, word));
+        game.Join(new HumanPlayer(newPlayerName, GetUserGuess, GetUsersCompleteGuess));
         navManager.NavigateTo($"/play/{GameName}/?playername={newPlayerName}");
     }
 
@@ -45,40 +45,11 @@ else
 
     static char GetUserGuess()
     {
-        Console.WriteLine("Please enter the letter you would like to guess: ");
-        char userGuess = Console.ReadKey().KeyChar;
-
-        if (char.IsAsciiLetter(userGuess))
-            return userGuess;
-
-        else
-        {
-            Console.WriteLine("That is an invalid entry. Please try again.");
-            return GetUserGuess();
-        }
+        throw new InvalidOperationException($"Get user guess not properly set after lobby");
     }
 
     static string GetUsersCompleteGuess()
     {
-        bool flagNonLetter = false;
-        Console.Write("What is your guess: ");
-        string completeGuess = Console.ReadLine().ToUpper();
-
-        if (string.IsNullOrWhiteSpace(completeGuess))
-            return GetUsersCompleteGuess();
-
-        foreach (char letter in completeGuess)
-        {
-            if (!char.IsAsciiLetter(letter))
-            {
-                flagNonLetter = true;
-            }
-            if (flagNonLetter)
-            {
-                Console.WriteLine("That guess contains invalid characters, try again.");
-                return GetUsersCompleteGuess();
-            }
-        }
-        return completeGuess;
+        throw new InvalidOperationException($"Get users complete guess not properly set after lobby");
     }
 }

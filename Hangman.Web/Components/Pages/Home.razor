@@ -95,7 +95,7 @@
 
     void createGame()
     {
-        bool result = Lobby.CreateGame(newGameName);
+        bool result = Lobby.CreateGame(newGameName, Game.SelectWordToGuess());
         newGameName = null;
         StateHasChanged();
     }
@@ -105,7 +105,7 @@
         Lobby.LobbyChanged += () => InvokeAsync(StateHasChanged);
         if (File.Exists(filePath))
         {
-            string json = File.ReadAllText("/wwwroot/data/scoreboard.json");
+            string json = File.ReadAllText(filePath);
             var scores = JsonSerializer.Deserialize<List<ScoreBoard>>(json);
         }
     }

@@ -1,15 +1,16 @@
 namespace Hangman.Logic;
-public abstract class Player : IPlayer // use of abstract class and inheritence
+public abstract class Player : IPlayer // use of abstract class and inheritence/ implementing the interface
 {
     public int Score { get; private set; }
     public string Name { get; set; }
     public int MaxMissedGuesses { get; private set; }
-    public Word Word { get; private set; }
+    public Word Word { get; set; }// will be set on joining game
     public List<char> IncorrectGuesses { get; private set; }
+    public event Action? HangmanChanged;
     public Game.GetGuessDelegate GetGuess; // delegate variable
     public Game.GetCompleteGuessDelegate GetCompleteGuess;  // delegate variable
 
-    public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, string wordToGuess)
+    public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) //creation of delegates of the type I created
     {
         Name = name;
         Score = 0;
@@ -17,7 +18,6 @@ public abstract class Player : IPlayer // use of abstract class and inheritence
         GetCompleteGuess = getCompleteGuess;
         MaxMissedGuesses = 6;
         IncorrectGuesses = new();
-        Word = new(wordToGuess);
     }
 
 
@@ -25,12 +25,11 @@ public abstract class Player : IPlayer // use of abstract class and inheritence
 
     public int UpdateScore(int points) => Score += points;
 
-    public bool HasGuesses()
+    public void RemoveAGuess()
     {
-        return MaxMissedGuesses > 0;
+        MaxMissedGuesses--;
+        HangmanChanged?.Invoke();
     }
-
-    public void RemoveAGuess() => MaxMissedGuesses--;
 
     public override string ToString()  // polymorphism/ overridden method
     {
@@ -46,6 +45,7 @@ public abstract class Player : IPlayer // use of abstract class and inheritence
     {
         IncorrectGuesses.Add(guess);
         MaxMissedGuesses--;
+        HangmanChanged?.Invoke();
     }
 
     public void ShowPastGuesses()

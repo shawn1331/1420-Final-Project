@@ -2,7 +2,7 @@ namespace Hangman.Logic;
 public class AIPlayer : Player  // inheritence 
 {
 
-    public AIPlayer(string wordToGuess, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, string name = "AI") : base(name, getGuess, getCompleteGuess, wordToGuess)  // chaining constructor from base class
+    public AIPlayer(Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, string name = "AI") : base(name, getGuess, getCompleteGuess)  // chaining constructor from base class also optional argument
     {
 
     }

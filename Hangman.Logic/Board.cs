@@ -1,5 +1,5 @@
 namespace Hangman.Logic;
-public class Board : IBoard  // inheritence
+public class Board : IBoard  // inheritence/ implementing the interface
 {
     public int MaxMissedGuesses { get; private set; }
 
@@ -11,6 +11,12 @@ public class Board : IBoard  // inheritence
     }
 
     public bool BoardHasGuesses() => MaxMissedGuesses > 0;
+
+    public void AddToBoardMissedGuesses(char guess)
+    {
+        IncorrectGuesses.Add(guess);
+        MaxMissedGuesses--;
+    }
     public void PrintHangedMan()
     {
 

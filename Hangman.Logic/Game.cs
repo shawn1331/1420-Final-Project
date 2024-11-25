@@ -16,6 +16,12 @@ public class Game
     {
 
     }
+
+    public Game(string wordToGuess)
+    {
+        Word = new Word(wordToGuess);
+        Board = new();
+    }
     public Game(Player p1, Player p2, string wordToGuess)
     {
         Player1 = p1;
@@ -25,7 +31,7 @@ public class Game
         Board = new();
     }
 
-    public void FireGameStateChanged() => GameStateChanged.Invoke();
+    public void FireGameStateChanged() => GameStateChanged?.Invoke();
 
     public void PlayGame()
     {
@@ -128,10 +134,12 @@ public class Game
         if (Player1 == null)
         {
             Player1 = player;
+            Player1.Word = new Word(Word.WordToGuess);
         }
         else if (Player2 == null)
         {
             Player2 = player;
+            Player2.Word = new Word(Word.WordToGuess);
         }
         else
             throw new GameFullException();

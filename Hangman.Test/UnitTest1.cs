@@ -41,9 +41,9 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess);
-        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess);
-        Game game = new(player, aI, "hello", 6);
+        AIPlayer aI = new("hello",GetUserGuess, GetUsersCompleteGuess);
+        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess, "hello");
+        Game game = new(player, aI, "hello");
         char aiGuess = aI.MakeGuess();
         aiGuess.Should().BeOneOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
     }
@@ -51,8 +51,8 @@ public class UnitTest1
     [Fact]
     public void TestHasGuesses()
     {
-        Board board = new(6);
-        board.HasGuesses().Should().Be(true);
+        Board board = new();
+        board.BoardHasGuesses().Should().Be(true);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class UnitTest1
     
         if (!word.CheckGuess(guess))
         {
-            board.AddToMissedGuesses(guess);
+            board.AddToBoardMissedGuesses(guess);
         }
         board.MaxMissedGuesses.Should().Be(5);
     }
@@ -138,12 +138,12 @@ public class UnitTest1
     [Fact]
     public void TestAddToGuesses()
     {
-        Board board = new(6);
+        Board board = new();
         Word word = new("hello");
         char guess = 'L';
         word.CheckGuess(guess);
-        board.AddToMissedGuesses(guess);
-        board._incorrectGuesses.Should().BeEquivalentTo(new List<char> {'L'});
+        board.AddToBoardMissedGuesses(guess);
+        board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> {'L'});
         
     }
 }
