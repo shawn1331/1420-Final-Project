@@ -2,10 +2,10 @@ namespace Hangman.Logic;
 
 public static class Lobby  // use of a static class
 {
-    public static event Action? LobbyChanged; // events 
-    public static Dictionary<string, Game?> GamesList { get; private set; } = new(); // properties
+    public static event Action? LobbyChanged; // event
+    public static Dictionary<string, Game?> GamesList { get; private set; } = new(); // property
     public static IEnumerable<(string Name, Game? Game)> ActiveGames => GamesList  // use of method call syntax for Linq
-        .Where(x => x.Value?.Player2 is not null && x.Value?.Player1.Word.CompletelyGuessed() is false && x.Value?.Word.CompletelyGuessed() is false)
+        .Where(x => x.Value?.Player2 is not null && x.Value?.Player1?.Word.CompletelyGuessed() is false && x.Value?.Player2?.Word.CompletelyGuessed() is false)
         .Select(x => (x.Key, x.Value));
 
     public static IEnumerable<string> OpenGames => GamesList    // use of method call syntax for Linq

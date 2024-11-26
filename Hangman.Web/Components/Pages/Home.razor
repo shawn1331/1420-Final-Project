@@ -65,7 +65,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (scores.Count > 0)
+            @if (scores.Count > 0 && scores != null)
             {
                 @foreach (var score in scores)
                 {
@@ -90,8 +90,8 @@
 
     string newGameName;
 
-    List<ScoreBoard> scores = new();
-    const string filePath = "/wwwroot/data/scoreboard.json";
+    List<ScoreBoard> scores;
+    const string filePath = "C:\\Users\\shawn\\1415code\\Fall 2024 1420 Code\\Final-Project\\1420-Final-Project\\Hangman.Web\\wwwroot\\data\\scoreboard.json";
 
     void createGame()
     {
@@ -106,7 +106,7 @@
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
-            var scores = JsonSerializer.Deserialize<List<ScoreBoard>>(json);
+            scores = JsonSerializer.Deserialize<List<ScoreBoard>>(json);
         }
     }
 }

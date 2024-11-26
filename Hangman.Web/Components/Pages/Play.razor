@@ -8,7 +8,7 @@
 
 @if (playerMe == null)
 {
-    <p>Player joining game...</p>
+    <p>Joining game...</p>
 }
 else if(playerOther == null)
 {
@@ -26,20 +26,29 @@ else if (!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
     if (playerMe.Score == playerOther.Score)
     {
         <p>It's A Tie!</p>
+        <br>
+        <br>
+        <p>Would You Like To Play Again?</p>
     }
     else if (playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score ||
              playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score)
     {
         <p>You Win @playerMe.Name!</p>
+        <br>
+        <br>
+        <p>Would You Like To Play Again?</p>
     }
     else
     {
         <p>You Lose @playerMe.Name!</p>
+        <br>
+        <br>
+        <p>Would You Like To Play Again?</p>
     }
         scores.Add(new ScoreBoard(game.Player1.Name, game.Player1.Score));
         scores.Add(new ScoreBoard(game.Player2.Name, game.Player2.Score));
         string json = JsonSerializer.Serialize(scores);
-        File.WriteAllText(filePath,json);
+        File.WriteAllText(filePath, json);
 }
 else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
 {
@@ -48,15 +57,28 @@ else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed
         (playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score))
     {
         <p>You Win @playerMe.Name!</p>
+        <br>
+        <br>
+        <p>Would You Like To Play Again?</p>
+    }
+    else if(playerMe.Score == playerOther.Score)
+    {
+        <p>It's A Tie!</p>
+        <br>
+        <br>
+        <p>Would You Like To Play Again?</p>
     }
     else
     {
         <p>You Lose @playerMe.Name!</p>
+        <br>
+        <br>
+        <p>Would You Like To Play Again?</p>
     }
         scores.Add(new ScoreBoard(game.Player1.Name, game.Player1.Score));
         scores.Add(new ScoreBoard(game.Player2.Name, game.Player2.Score));
         string json = JsonSerializer.Serialize(scores);
-        File.WriteAllText(filePath,json);
+        File.WriteAllText(filePath, json);
 }
 else
 {
@@ -65,7 +87,7 @@ else
             <h3>Player: @playerMe.Name</h3>
             <p>Score: @playerMe.Score</p>
             <img src="@getImagePath(playerMe)" alt="Hangman State" />
-            <p>Word: @playerMe.Word.WordToGuess
+            <p>Word: 
             @foreach(char letter in playerMe.Word.GuessedLetters)
             {
              <span>@char.ToUpper(letter)</span> <span> </span>
@@ -94,14 +116,14 @@ else
             {
                 <input type="text" @bind="completeGuess" maxlength=  placeholder="Guess Word"/>
                 <button @onclick="() => playerMe.MakeCompleteGuess()">Check Word Guessed</button>
-            }@*null reference is saying this line?*@
+            }
         </div>
 
         <div class="player-right">
             <h3>Opponent: @playerOther?.Name</h3>
             <p>Score: @playerOther?.Score</p>
             <img src="@getImagePath(playerOther)" alt="Hangman State" />
-            <p>Word Progress: @playerOther.Word.WordToGuess
+            <p>Word Progress: 
                 @foreach(char letter in playerOther?.Word?.GuessedLetters)
                 {
                     @if(letter == '_')
@@ -145,7 +167,7 @@ else
     string? guess;
     string? completeGuess;
     List<ScoreBoard> scores = new();
-    const string filePath = "/wwwroot/data/scoreboard.json";
+    const string filePath = "C:\\Users\\shawn\\1415code\\Fall 2024 1420 Code\\Final-Project\\1420-Final-Project\\Hangman.Web\\wwwroot\\data\\scoreboard.json";
 
     protected override void OnParametersSet()
     {
@@ -167,9 +189,13 @@ else
 
         game.GameStateChanged += handleGameStateChanged;
         playerMe.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
-        playerMe.HangmanChanged += () => InvokeAsync(StateHasChanged);
+        playerMe.PlayerInstanceChanged += () => InvokeAsync(StateHasChanged);
+
         if(playerOther is not null)
-        playerOther.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
+        {
+            playerOther.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
+            playerOther.PlayerInstanceChanged += () => InvokeAsync(StateHasChanged);
+        }
     }
 
     char makeGuess()
@@ -182,7 +208,6 @@ else
         {
             playerMe.AddToMissedGuesses(guess[0]);
         }
-        @* player.Word.WordHasChanged += () => InvokeAsync(StateHasChanged); *@
         char newGuess = guess[0];
         guess = string.Empty;
         return newGuess;
@@ -209,7 +234,7 @@ else
         if (playerOther == null)
             playerOther = playerMe == game.Player1 ? game.Player2 : game.Player1;
 
-        playerOther.HangmanChanged += () => InvokeAsync(StateHasChanged);
+        playerOther.PlayerInstanceChanged += () => InvokeAsync(StateHasChanged);
         playerOther.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
         InvokeAsync(StateHasChanged);
 

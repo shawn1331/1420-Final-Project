@@ -6,11 +6,11 @@ public abstract class Player : IPlayer // use of abstract class and inheritence/
     public int MaxMissedGuesses { get; private set; }
     public Word Word { get; set; }// will be set on joining game
     public List<char> IncorrectGuesses { get; private set; }
-    public event Action? HangmanChanged;
+    public event Action? PlayerInstanceChanged;
     public Game.GetGuessDelegate GetGuess; // delegate variable
     public Game.GetCompleteGuessDelegate GetCompleteGuess;  // delegate variable
 
-    public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) //creation of delegates of the type I created
+    public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) // passing the delegates into the player constructor to pass the methods
     {
         Name = name;
         Score = 0;
@@ -23,12 +23,16 @@ public abstract class Player : IPlayer // use of abstract class and inheritence/
 
     public bool PlayerHasGuesses() => MaxMissedGuesses > 0;
 
-    public int UpdateScore(int points) => Score += points;
-
+    public int UpdateScore(int points)
+    {
+        Score += points;
+        PlayerInstanceChanged?.Invoke();
+        return Score;
+    }
     public void RemoveAGuess()
     {
         MaxMissedGuesses--;
-        HangmanChanged?.Invoke();
+        PlayerInstanceChanged?.Invoke();
     }
 
     public override string ToString()  // polymorphism/ overridden method
@@ -45,7 +49,7 @@ public abstract class Player : IPlayer // use of abstract class and inheritence/
     {
         IncorrectGuesses.Add(guess);
         MaxMissedGuesses--;
-        HangmanChanged?.Invoke();
+        PlayerInstanceChanged?.Invoke();
     }
 
     public void ShowPastGuesses()

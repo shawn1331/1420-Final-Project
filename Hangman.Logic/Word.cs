@@ -59,34 +59,24 @@ public class Word
 
     public bool CheckCompleteGuess(string word)
     {
-        Console.WriteLine("Would you like to try to guess the rest of the word? y/n");
-        char guessRestOfWord = Console.ReadKey(true).KeyChar;
-
-        if (guessRestOfWord == 'y')
+        bool completeGuess = false;
+        if (word.Length < WordToGuess.Length || word.Length > WordToGuess.Length)
         {
-            bool completeGuess = false;
-            if (word.Length < WordToGuess.Length || word.Length > WordToGuess.Length)
-            {
-                Console.WriteLine("That word was longer/shorter than the word your trying to guess. Try again next time.");
-                return completeGuess;
-            }
-
-            string guess = word.ToUpper();
-
-            for (int i = 0; i < WordToGuess.Length; i++)
-            {
-                if (WordToGuess[i] == guess[i])
-                {
-                    GuessedLetters[i] = guess[i];
-                    completeGuess = true;
-                    WordHasChanged?.Invoke();
-                }
-            }
+            Console.WriteLine("That word was longer/shorter than the word your trying to guess. Try again next time.");
             return completeGuess;
         }
-        else
+
+        string guess = word.ToUpper();
+
+        for (int i = 0; i < WordToGuess.Length; i++)
         {
-            return false;
+            if (WordToGuess[i] == guess[i])
+            {
+                GuessedLetters[i] = guess[i];
+                completeGuess = true;
+                WordHasChanged?.Invoke();
+            }
         }
+        return completeGuess;
     }
 }
