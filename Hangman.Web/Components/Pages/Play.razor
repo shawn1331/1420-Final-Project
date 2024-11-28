@@ -29,6 +29,7 @@ else if (!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
+        <button @onclick="() => playAgain()">Play Again</button>
     }
     else if (playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score ||
              playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score)
@@ -37,6 +38,8 @@ else if (!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
+        <button @onclick="() => playAgain()">Play Again</button>
+
     }
     else
     {
@@ -44,11 +47,9 @@ else if (!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
+        <button @onclick="() => playAgain()">Play Again</button>
+
     }
-        scores.Add(new ScoreBoard(game.Player1.Name, game.Player1.Score));
-        scores.Add(new ScoreBoard(game.Player2.Name, game.Player2.Score));
-        string json = JsonSerializer.Serialize(scores);
-        File.WriteAllText(filePath, json);
 }
 else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
 {
@@ -60,6 +61,8 @@ else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
+        <button @onclick="() => playAgain()">Play Again</button>
+
     }
     else if(playerMe.Score == playerOther.Score)
     {
@@ -67,6 +70,8 @@ else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
+        <button @onclick="() => playAgain()">Play Again</button>
+
     }
     else
     {
@@ -74,11 +79,9 @@ else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
+        <button @onclick="() => playAgain()">Play Again</button>
+
     }
-        scores.Add(new ScoreBoard(game.Player1.Name, game.Player1.Score));
-        scores.Add(new ScoreBoard(game.Player2.Name, game.Player2.Score));
-        string json = JsonSerializer.Serialize(scores);
-        File.WriteAllText(filePath, json);
 }
 else
 {
@@ -117,6 +120,9 @@ else
                 <input type="text" @bind="completeGuess" maxlength=  placeholder="Guess Word"/>
                 <button @onclick="() => playerMe.MakeCompleteGuess()">Check Word Guessed</button>
             }
+
+            @if(error != null)
+            @error
         </div>
 
         <div class="player-right">
@@ -167,7 +173,7 @@ else
     string? guess;
     string? completeGuess;
     List<ScoreBoard> scores = new();
-    const string filePath = "C:\\Users\\shawn\\1415code\\Fall 2024 1420 Code\\Final-Project\\1420-Final-Project\\Hangman.Web\\wwwroot\\data\\scoreboard.json";
+    string? error;
 
     protected override void OnParametersSet()
     {
@@ -208,14 +214,32 @@ else
         {
             playerMe.AddToMissedGuesses(guess[0]);
         }
+
         char newGuess = guess[0];
         guess = string.Empty;
+
+        if(playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
+        {
+            Lobby.Storage.AddScore(playerMe);
+            Lobby.Storage.AddScore(playerMe);
+        }
+        else if(!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
+         !playerOther.Word.CompletelyGuessed() && !playerOther.PlayerHasGuesses())
+        {
+            Lobby.Storage.AddScore(playerMe);
+            Lobby.Storage.AddScore(playerOther);
+        }
+
         return newGuess;
     }
 
     string makeCompleteGuess()
     {
         int remainingLetterCount = playerMe.Word.RemainingLetterCount;
+
+        if(completeGuess.Length < playerMe.Word.WordToGuess.Length || completeGuess.Length > playerMe.Word.WordToGuess.Length)
+        error = $"Your guess was not the correct length {completeGuess.Length} was the length of your guess and {playerMe.Word.WordToGuess.Length} is the lengh it should be.";
+
         if (playerMe.Word.CheckCompleteGuess(completeGuess))
         {
             playerMe.UpdateScore(remainingLetterCount * 10);
@@ -226,13 +250,28 @@ else
         }
         string newCompleteGuess = completeGuess;
         completeGuess = string.Empty;
+
+        if(playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
+        {
+            Lobby.Storage.AddScore(playerMe);
+            Lobby.Storage.AddScore(playerOther);
+        }
+
+
+        else if(!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
+         !playerOther.Word.CompletelyGuessed() && !playerOther.PlayerHasGuesses())
+        {
+            Lobby.Storage.AddScore(playerMe);
+            Lobby.Storage.AddScore(playerOther);
+        }
+
         return newCompleteGuess;
     }
 
     void handleGameStateChanged()
     {
         if (playerOther == null)
-            playerOther = playerMe == game.Player1 ? game.Player2 : game.Player1;
+            playerOther = playerMe == game?.Player1 ? game?.Player2 : game?.Player1;
 
         playerOther.PlayerInstanceChanged += () => InvokeAsync(StateHasChanged);
         playerOther.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
@@ -245,6 +284,7 @@ else
     void playAgain()
     {
         game.ResetGameState(Game.SelectWordToGuess());
+        navManager.NavigateTo($"/");
     }
 
     string getImagePath(Player player)

@@ -41,8 +41,8 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        AIPlayer aI = new("hello",GetUserGuess, GetUsersCompleteGuess);
-        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess, "hello");
+        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess);
+        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess);
         Game game = new(player, aI, "hello");
         char aiGuess = aI.MakeGuess();
         aiGuess.Should().BeOneOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');

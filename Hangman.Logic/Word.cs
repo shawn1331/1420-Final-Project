@@ -60,6 +60,7 @@ public class Word
     public bool CheckCompleteGuess(string word)
     {
         bool completeGuess = false;
+        
         if (word.Length < WordToGuess.Length || word.Length > WordToGuess.Length)
         {
             Console.WriteLine("That word was longer/shorter than the word your trying to guess. Try again next time.");
@@ -74,9 +75,10 @@ public class Word
             {
                 GuessedLetters[i] = guess[i];
                 completeGuess = true;
-                WordHasChanged?.Invoke();
             }
         }
+
+        WordHasChanged?.Invoke();
         return completeGuess;
     }
 }
