@@ -65,9 +65,9 @@
             </tr>
         </thead>
         <tbody>
-            @if (scores.Count > 0 && scores != null)
+            @if (topTen.Count() > 0 && topTen != null)
             {
-                @foreach (var score in scores)
+                @foreach (var score in topTen)
                 {
                     <tr>
                         <td>@score.Name</td>
@@ -91,6 +91,7 @@
     string newGameName;
 
     List<ScoreBoard> scores;
+    IEnumerable<(string Name, int Score)> topTen;
 
     void createGame()
     {
@@ -103,5 +104,6 @@
     {
         Lobby.LobbyChanged += () => InvokeAsync(StateHasChanged);
         scores = Lobby.Storage.GetScoreBoard();
+        topTen = scores.OrderByDescending(s => s.Score).Select(s => (s.Name, s.Score)).Take(10);
     }
 }

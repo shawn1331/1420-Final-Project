@@ -3,6 +3,7 @@
 @inject NavigationManager navManager
 @using System.Text.Json
 @using Microsoft.AspNetCore
+@using System.Timers
 
 <PageTitle>Hangman</PageTitle>
 
@@ -278,7 +279,6 @@ else
         InvokeAsync(StateHasChanged);
 
         game.GameReset += () => navManager.NavigateTo("/");
-
     }
 
     void playAgain()
@@ -300,5 +300,10 @@ else
             0 => "/hang6.bmp",
             _ => throw new ArgumentException($"Invalid number of missed guesses {player?.MaxMissedGuesses}")
         };
+    }
+
+    async Task timer()
+    {
+        
     }
 }
