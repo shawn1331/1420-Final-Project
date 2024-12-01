@@ -53,18 +53,18 @@ public class Word
                 NumberOfGuessedLetters++;
             }
         }
-        WordHasChanged.Invoke();
+        WordHasChanged?.Invoke();
         return correctGuess;
     }
 
     public bool CheckCompleteGuess(string word)
     {
         bool completeGuess = false;
-        
+
         if (word.Length < WordToGuess.Length || word.Length > WordToGuess.Length)
         {
-            Console.WriteLine("That word was longer/shorter than the word your trying to guess. Try again next time.");
-            return completeGuess;
+            throw new InvalidOperationException("Your guess was of incorrect length.");
+            // return completeGuess;
         }
 
         string guess = word.ToUpper();

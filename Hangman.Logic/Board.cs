@@ -15,7 +15,7 @@ public class Board : IBoard  // inheritence/ implementing the interface
     public void AddToBoardMissedGuesses(char guess)
     {
         IncorrectGuesses.Add(guess);
-        MaxMissedGuesses--;
+        MaxMissedGuesses -= 1;
     }
     public void PrintHangedMan()
     {

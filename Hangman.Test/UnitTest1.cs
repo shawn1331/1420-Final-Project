@@ -49,6 +49,57 @@ public class UnitTest1
     }
 
     [Fact]
+    public void TestAIMakeGuess()
+    {
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        char aiGuess;
+        List<char> drawnLetters = new();
+        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess);
+        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess);
+        Game game = new(player, aI, "hello");
+        for (int i = 0; i < 26; i++)
+        {
+            aiGuess = aI.MakeGuess();
+            drawnLetters.Add(aiGuess);
+        }
+        aiGuess = 'A';//aI.MakeGuess();
+        Assert.DoesNotContain(aiGuess, drawnLetters);
+    }
+
+    [Fact]
     public void TestHasGuesses()
     {
         Board board = new();
@@ -58,33 +109,31 @@ public class UnitTest1
     [Fact]
     public void TestMaxGuessesReducingAfterGuess()
     {
-        Game game = new();
-        Word word = new("hello");
-        Board board = new();
+        Game game = new("hello");
         char guess = 'R';
-    
-        if (!word.CheckGuess(guess))
+
+        if (!game.Word.CheckGuess(guess))
         {
-            board.AddToBoardMissedGuesses(guess);
+            game.Board.AddToBoardMissedGuesses(guess);
         }
-        board.MaxMissedGuesses.Should().Be(5);
+        game.Board.MaxMissedGuesses.Should().Be(5);
     }
 
     [Fact]
     public void TestCheckGuessWithWrongLetter()
     {
-        Word word = new("hello");
+        Game game = new("hello");
         char guess = 'A';
-        word.CheckGuess(guess).Should().Be(false);
+        game.Word.CheckGuess(guess).Should().Be(false);
     }
-    
+
 
     [Fact]
     public void TestCheckGuessWithCorrectLetter()
     {
-        Word word = new("hello");
+        Game game = new("hello");
         char guess = 'E';
-        word.CheckGuess(guess).Should().Be(true);
+        game.Word.CheckGuess(guess).Should().Be(true);
     }
 
     [Fact]
@@ -143,7 +192,7 @@ public class UnitTest1
         char guess = 'L';
         word.CheckGuess(guess);
         board.AddToBoardMissedGuesses(guess);
-        board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> {'L'});
-        
+        board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> { 'L' });
+
     }
 }
