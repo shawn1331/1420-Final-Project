@@ -95,7 +95,7 @@ public class UnitTest1
             aiGuess = aI.MakeGuess();
             drawnLetters.Add(aiGuess);
         }
-        aiGuess = 'A';//aI.MakeGuess();
+        aiGuess = aI.MakeGuess();
         Assert.DoesNotContain(aiGuess, drawnLetters);
     }
 

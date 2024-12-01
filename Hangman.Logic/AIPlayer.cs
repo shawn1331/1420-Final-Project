@@ -10,7 +10,12 @@ public class AIPlayer : Player  // inheritence
 
     public override char MakeGuess()  // polymorphism/ overridden method
     {
-        return (char)('A' + Game._random.Next(0, 26));
+        char guess = (char)('A' + Game._random.Next(0, 26));
+        while (drawnLetters.Contains(guess))
+        {
+            guess = (char)('A' + Game._random.Next(0, 26));
+        }
+        return guess;
     }
 
     public override string MakeCompleteGuess()  // polymorphism/ overridden method
