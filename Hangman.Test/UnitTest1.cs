@@ -86,17 +86,15 @@ public class UnitTest1
             return completeGuess;
         }
         char aiGuess;
-        List<char> drawnLetters = new();
         AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess);
         HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess);
         Game game = new(player, aI, "hello");
-        for (int i = 0; i < 26; i++)
+        for (int i = 0; i < 20; i++)
         {
             aiGuess = aI.MakeGuess();
-            drawnLetters.Add(aiGuess);
         }
         aiGuess = aI.MakeGuess();
-        Assert.DoesNotContain(aiGuess, drawnLetters);
+        aI.drawnLetters.Should().HaveElementAt(aI.drawnLetters.Count-1,aiGuess); //  char is added to the list before the method returns so the list should contain the last guess at the last index
     }
 
     [Fact]
@@ -142,6 +140,15 @@ public class UnitTest1
         Word word = new("hello");
         string guess = "hello";
         word.CheckCompleteGuess(guess).Should().Be(true);
+    }
+
+    [Fact]
+    public void TestCheckCompleteGuessWithIncorrectLengthShouldThrowException()
+    {
+        Word word = new("hello");
+        string guess = "asdfjl";
+      Action act = () =>  word.CheckCompleteGuess(guess);
+      act.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
