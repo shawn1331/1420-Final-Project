@@ -1,5 +1,5 @@
 namespace Hangman.Logic;
-public interface IPlayer // 2nd use of an interface
+public interface IPlayer // REQ#2.2.1
 {
    public List<char> IncorrectGuesses { get; }
    public int Score { get; }

@@ -114,7 +114,7 @@ else
             <h1>Make Your Guess!</h1>
             <p>Remaining Guesses: @playerMe.MaxMissedGuesses</p>
             <input type="text" @bind="guess" maxlength="1" placeholder="Guess Letter" />
-            <button @onclick="() => playerMe.MakeGuess()">Check Guess</button>
+            <button class="guessbutton" @onclick="() => playerMe.MakeGuess()">Check Guess</button>
             <br>
             @if(playerMe?.Word?.RemainingLetterCount <= playerMe?.Word?.WordToGuess?.Length - 4)
             {
@@ -195,7 +195,7 @@ else
         playerOther = playerMe == game?.Player1 ? game?.Player2 : game?.Player1;
 
         game.GameStateChanged += handleGameStateChanged;
-        playerMe.Word.WordHasChanged += () => InvokeAsync(StateHasChanged);
+        playerMe.Word.WordHasChanged += () => InvokeAsync(StateHasChanged); @*REQ#3.1.3*@
         playerMe.PlayerInstanceChanged += () => InvokeAsync(StateHasChanged);
 
         if(playerOther is not null)
@@ -218,7 +218,7 @@ else
 
         char newGuess = guess[0];
         guess = string.Empty;
-
+        @* REQ#4.1.1 *@
         if(playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
         {
             Lobby.Storage.AddScore(playerMe);
@@ -251,7 +251,8 @@ else
         }
         string newCompleteGuess = completeGuess;
         completeGuess = string.Empty;
-
+        
+        @* REQ#4.1.1 *@
         if(playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
         {
             Lobby.Storage.AddScore(playerMe);
@@ -300,10 +301,5 @@ else
             0 => "/hang6.bmp",
             _ => throw new ArgumentException($"Invalid number of missed guesses {player?.MaxMissedGuesses}")
         };
-    }
-
-    async Task timer()
-    {
-        
     }
 }

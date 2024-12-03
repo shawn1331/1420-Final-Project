@@ -1,8 +1,8 @@
 namespace Hangman.Logic;
 
-public static class Lobby  // use of a static class
+public static class Lobby  // REQ#2.3.1
 {
-    public static event Action? LobbyChanged; // event
+    public static event Action? LobbyChanged; // REQ#3.1.1
     public static Dictionary<string, Game?> GamesList { get; private set; } = new(); // property
     public static JsonStorage Storage { get; } = new();
     public static IEnumerable<(string Name, Game? Game)> ActiveGames => GamesList  // use of method call syntax for Linq
@@ -13,7 +13,7 @@ public static class Lobby  // use of a static class
         .Where(x => x.Value?.Player2 == null)
         .Select(x => x.Key);
 
-    public static bool CreateGame(string gameName, string wordToGuess) // static method
+    public static bool CreateGame(string gameName, string wordToGuess) // REQ#2.3.1
     {
         Game newGame = new(wordToGuess);
         bool gameAdded = GamesList.TryAdd(gameName, newGame);

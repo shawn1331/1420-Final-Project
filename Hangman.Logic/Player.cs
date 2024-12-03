@@ -1,5 +1,5 @@
 namespace Hangman.Logic;
-public abstract class Player : IPlayer // use of abstract class and inheritence/ implementing the interface
+public abstract class Player : IPlayer // REQ#2.1.1  REQ#2.2.1
 {
     public int Score { get; private set; }
     public string Name { get; set; }
@@ -23,7 +23,7 @@ public abstract class Player : IPlayer // use of abstract class and inheritence/
 
     public bool PlayerHasGuesses() => MaxMissedGuesses > 0;
 
-    public int UpdateScore(int points)
+    public int UpdateScore(int points)// REQ#1.7.3  //REQ#1.8.3
     {
         Score += points;
         PlayerInstanceChanged?.Invoke();
@@ -45,7 +45,7 @@ public abstract class Player : IPlayer // use of abstract class and inheritence/
         Score = 0;
     }
 
-    public void AddToMissedGuesses(char guess)
+    public void AddToMissedGuesses(char guess)//REQ#1.2.3
     {
         IncorrectGuesses.Add(guess);
         MaxMissedGuesses--;

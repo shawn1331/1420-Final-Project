@@ -5,7 +5,7 @@ namespace Hangman.Test;
 public class UnitTest1
 {
     [Fact]
-    public void TestAIMakeGuessReturnsCapitals()
+    public void TestAIMakeGuessReturnsCapitals() //REQ#1.1.1
     {
         static char GetUserGuess()
         {
@@ -49,7 +49,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestAIMakeGuess()
+    public void TestAIMakeGuessNotRedrawingLettersAlreadyDrawn() //REQ#1.1.2 now fixed and passes
     {
         static char GetUserGuess()
         {
@@ -98,14 +98,102 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestHasGuesses()
+    public void TestHasGuesses()//REQ#1.2.1
     {
-        Board board = new();
-        board.BoardHasGuesses().Should().Be(true);
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        Player player = new HumanPlayer("test",GetUserGuess ,GetUsersCompleteGuess);
+        player.PlayerHasGuesses().Should().Be(true);
     }
 
     [Fact]
-    public void TestMaxGuessesReducingAfterGuess()
+    public void TestHasGuessesReducesAfterMissingGuessAndPlayerAddToMissedGuesses()//REQ#1.2.2 now fixed and passes
+    {
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        Player player = new HumanPlayer("test",GetUserGuess ,GetUsersCompleteGuess);
+        player.Word = new("test");
+        char playerGuess = 'H';
+        player.Word.CheckGuess(playerGuess);
+        player.AddToMissedGuesses(playerGuess);
+        player.IncorrectGuesses.Should().Contain(playerGuess);
+        player.PlayerHasGuesses().Should().Be(true);
+        player.MaxMissedGuesses.Should().Be(5);
+    }
+
+    [Fact]
+    public void TestBoardMaxGuesses()//REQ#1.3.1
+    {
+        Game game = new("hello");
+        game.Board.MaxMissedGuesses.Should().Be(6);
+    }
+
+    [Fact]
+    public void TestBoardMaxGuessesReducingAfterGuess()//REQ#1.3.2
     {
         Game game = new("hello");
         char guess = 'R';
@@ -118,7 +206,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestCheckGuessWithWrongLetter()
+    public void TestCheckGuessWithWrongLetter()//REQ#1.4.2
     {
         Game game = new("hello");
         char guess = 'A';
@@ -127,7 +215,7 @@ public class UnitTest1
 
 
     [Fact]
-    public void TestCheckGuessWithCorrectLetter()
+    public void TestCheckGuessWithCorrectLetter()//REQ#1.4.1
     {
         Game game = new("hello");
         char guess = 'E';
@@ -135,7 +223,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestCheckCompleteGuessShouldBeTrue()
+    public void TestCheckCompleteGuessShouldBeTrue()//REQ#1.5.1
     {
         Word word = new("hello");
         string guess = "hello";
@@ -143,7 +231,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestCheckCompleteGuessWithIncorrectLengthShouldThrowException()
+    public void TestCheckCompleteGuessWithIncorrectLengthShouldThrowException()//REQ#1.5.2
     {
         Word word = new("hello");
         string guess = "asdfjl";
@@ -152,7 +240,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestCheckCompleteGuessShouldBeFalse()
+    public void TestCheckCompleteGuessShouldBeFalse()//REQ#1.5.2
     {
         Word word = new("hello");
         string guess = "asdfj";
@@ -160,7 +248,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestCompletelyGuessedShouldBeTrue()
+    public void TestCompletelyGuessedShouldBeTrue()//REQ#1.6.1
     {
         Word word = new("hello");
         string guess = "hello";
@@ -169,7 +257,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestCompletelyGuessedShouldBeFalse()
+    public void TestCompletelyGuessedShouldBeFalse()//REQ#1.6.2
     {
         Word word = new("hello");
         string guess = "asdfg";
@@ -178,21 +266,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void TestPrintBoard()
-    {
-
-    }
-
-    // [Fact]
-    // public void TestPrintWord()
-    // {
-    //     Word word = new("hello");
-    //     Board board = new(6);
-    //     word._guessedLetters.Should().BeEquivalentTo<char>(new char []{'_','_','_','_','_'});
-    // }
-
-    [Fact]
-    public void TestAddToGuesses()
+    public void TestBoardAddToMissedGuesses()
     {
         Board board = new();
         Word word = new("hello");
@@ -200,6 +274,195 @@ public class UnitTest1
         word.CheckGuess(guess);
         board.AddToBoardMissedGuesses(guess);
         board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> { 'L' });
+
+    }
+
+    [Fact]
+    public void TestPlayerScore()//REQ#1.7.1
+    {
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+        player.Word = new("test");
+        char playerGuess = 'E';
+        player.Word.CheckGuess(playerGuess);
+        player.UpdateScore(player.Word.NumberOfGuessedLetters * 5);
+        player.Score.Should().Be(5);
+
+    }
+
+    [Fact]
+    public void TestPlayerScoreWithMultipleLetters()//REQ#1.7.2
+    {
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+        player.Word = new("test");
+        char playerGuess = 'T';
+        player.Word.CheckGuess(playerGuess);
+        player.UpdateScore(player.Word.NumberOfGuessedLetters * 5);
+        player.Score.Should().Be(10);
+
+    }
+
+    [Fact]
+    public void TestScoreWithCompleteGuessWithCorrectGuess()//REQ#1.8.1
+    {
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+        player.Word = new("test");
+        string playerGuess = "TEST";
+        int numberOfLetters = player.Word.RemainingLetterCount;
+        player.Word.CheckCompleteGuess(playerGuess);
+        if (player.Word.CompletelyGuessed())
+        player.UpdateScore(numberOfLetters * 10);
+
+        player.Score.Should().Be(40);
+    }
+
+    [Fact]
+    public void TestScorewithCompleteGuessWithWrongGuess()//REQ#1.8.2
+    {
+        static char GetUserGuess()
+        {
+            Console.WriteLine("Please enter the letter you would like to guess: ");
+            char userGuess = Console.ReadKey().KeyChar;
+
+            if (char.IsAsciiLetter(userGuess))
+                return userGuess;
+
+            else
+            {
+                Console.WriteLine("That is an invalid entry. Please try again.");
+                return GetUserGuess();
+            }
+        }
+
+        static string GetUsersCompleteGuess()
+        {
+            bool flagNonLetter = false;
+            Console.Write("What is your guess: ");
+            string completeGuess = Console.ReadLine().ToUpper();
+            foreach (char letter in completeGuess)
+            {
+                if (!char.IsAsciiLetter(letter))
+                {
+                    flagNonLetter = true;
+                }
+                if (flagNonLetter)
+                {
+                    Console.WriteLine("That guess contains invalid characters, try again.");
+                    return GetUsersCompleteGuess();
+                }
+            }
+            return completeGuess;
+        }
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+        player.Word = new("test");
+        string playerGuess = "BOMB";
+        int numberOfLetters = player.Word.RemainingLetterCount;
+        player.Word.CheckCompleteGuess(playerGuess);
+        if (player.Word.CompletelyGuessed())
+        player.UpdateScore(numberOfLetters * 10);
+        
+        player.Score.Should().Be(0);
 
     }
 }

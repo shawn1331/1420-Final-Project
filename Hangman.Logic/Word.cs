@@ -35,12 +35,12 @@ public class Word
         return WordToGuess;
     }
 
-    public bool CompletelyGuessed()
+    public bool CompletelyGuessed()//REQ#1.6.3
     {
         return new string(GuessedLetters) == WordToGuess;
     }
 
-    public bool CheckGuess(char letter)
+    public bool CheckGuess(char letter)//REQ#1.4.3  
     {
         NumberOfGuessedLetters = 0;
         bool correctGuess = false;
@@ -53,18 +53,17 @@ public class Word
                 NumberOfGuessedLetters++;
             }
         }
-        WordHasChanged?.Invoke();
+        WordHasChanged?.Invoke(); // REQ#3.1.3
         return correctGuess;
     }
 
-    public bool CheckCompleteGuess(string word)
+    public bool CheckCompleteGuess(string word)// REQ#1.5.3 
     {
         bool completeGuess = false;
 
         if (word.Length < WordToGuess.Length || word.Length > WordToGuess.Length)
         {
             throw new InvalidOperationException("Your guess was of incorrect length.");
-            // return completeGuess;
         }
 
         string guess = word.ToUpper();
@@ -78,7 +77,7 @@ public class Word
             }
         }
 
-        WordHasChanged?.Invoke();
+        WordHasChanged?.Invoke(); // REQ#3.1.3
         return completeGuess;
     }
 }

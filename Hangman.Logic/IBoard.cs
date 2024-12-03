@@ -1,6 +1,6 @@
 namespace Hangman.Logic;
 
-public interface IBoard // 1st use of an interface 
+public interface IBoard // REQ#2.2.1 
 {
     void PrintHangedMan();
     void PrintWord(Word word);

@@ -1,5 +1,5 @@
 namespace Hangman.Logic;
-public class AIPlayer : Player  // inheritence 
+public class AIPlayer : Player, IPlayer  // REQ#2.1.2 REQ#2.2.1
 {
     public List<char> drawnLetters { get; private set; }
 
@@ -8,7 +8,7 @@ public class AIPlayer : Player  // inheritence
         drawnLetters = new();
     }
 
-    public override char MakeGuess()  // polymorphism/ overridden method
+    public override char MakeGuess()  // REQ#1.1.3
     {
         char guess = (char)('A' + Game._random.Next(0, 26));
         while (drawnLetters.Contains(guess))
