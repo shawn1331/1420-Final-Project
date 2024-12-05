@@ -94,7 +94,7 @@ public class UnitTest1
             aiGuess = aI.MakeGuess();
         }
         aiGuess = aI.MakeGuess();
-        aI.drawnLetters.Should().HaveElementAt(aI.drawnLetters.Count-1,aiGuess); //  char is added to the list before the method returns so the list should contain the last guess at the last index
+        aI.drawnLetters.Should().HaveElementAt(aI.drawnLetters.Count - 1, aiGuess); //  char is added to the list before the method returns so the list should contain the last guess at Count - 1
     }
 
     [Fact]
@@ -134,7 +134,7 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test",GetUserGuess ,GetUsersCompleteGuess);
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
         player.PlayerHasGuesses().Should().Be(true);
     }
 
@@ -175,7 +175,7 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test",GetUserGuess ,GetUsersCompleteGuess);
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
         player.Word = new("test");
         char playerGuess = 'H';
         player.Word.CheckGuess(playerGuess);
@@ -235,8 +235,8 @@ public class UnitTest1
     {
         Word word = new("hello");
         string guess = "asdfjl";
-      Action act = () =>  word.CheckCompleteGuess(guess);
-      act.Should().Throw<InvalidOperationException>();
+        Action act = () => word.CheckCompleteGuess(guess);
+        act.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
@@ -270,10 +270,12 @@ public class UnitTest1
     {
         Board board = new();
         Word word = new("hello");
-        char guess = 'L';
-        word.CheckGuess(guess);
-        board.AddToBoardMissedGuesses(guess);
-        board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> { 'L' });
+        char guess = 'A';
+        if (!word.CheckGuess(guess))
+        {
+            board.AddToBoardMissedGuesses(guess);
+        }
+        board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> { 'A' });
 
     }
 
@@ -412,7 +414,7 @@ public class UnitTest1
         int numberOfLetters = player.Word.RemainingLetterCount;
         player.Word.CheckCompleteGuess(playerGuess);
         if (player.Word.CompletelyGuessed())
-        player.UpdateScore(numberOfLetters * 10);
+            player.UpdateScore(numberOfLetters * 10);
 
         player.Score.Should().Be(40);
     }
@@ -457,11 +459,11 @@ public class UnitTest1
         Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
         player.Word = new("test");
         string playerGuess = "BOMB";
-        int numberOfLetters = player.Word.RemainingLetterCount;
         player.Word.CheckCompleteGuess(playerGuess);
+
         if (player.Word.CompletelyGuessed())
-        player.UpdateScore(numberOfLetters * 10);
-        
+            player.UpdateScore(player.Word.RemainingLetterCount * 10);
+
         player.Score.Should().Be(0);
 
     }
