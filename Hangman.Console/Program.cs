@@ -2,8 +2,8 @@
 using Hangman.Logic;
 
 string word = Game.SelectWordToGuess();
-Player player1 = new HumanPlayer("Shawn", GetUserGuess, GetUsersCompleteGuess, word);
-Player player2 = new AIPlayer(word, GetUserGuess, GetUsersCompleteGuess);  // passing functions in to be used where the delegate variable is
+Player player1 = new HumanPlayer("Shawn", GetUserGuess, GetUsersCompleteGuess);
+Player player2 = new AIPlayer(GetUserGuess, GetUsersCompleteGuess);  // passing functions in to be used where the delegate variable is
 Game game = new(player1, player2, word);
 
 bool playAgain = true;

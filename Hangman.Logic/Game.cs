@@ -41,7 +41,8 @@ public class Game
         while (Board.BoardHasGuesses() && !Word.CompletelyGuessed())
         {
             Console.Clear();
-            Board.PrintHangedMan();
+            string currentHangman = Board.GetHangedMan();
+            Console.Write(currentHangman);
             Board.PrintWord(Word);
             Board.PrintPoints(CurrentPlayer);
 

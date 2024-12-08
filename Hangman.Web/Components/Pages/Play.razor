@@ -113,15 +113,15 @@ else
         <div class="game-board">
             <h1>Make Your Guess!</h1>
             <p>Remaining Guesses: @playerMe.MaxMissedGuesses</p>
-            <input type="text" @bind="guess" maxlength="1" placeholder="Guess Letter" />
-            <button class="guessbutton" @onclick="() => playerMe.MakeGuess()">Check Guess</button>
+            <input class="guessinput" type="text" @bind="guess" maxlength="1" placeholder="Guess Letter" />
+            <button class="guessbutton" @onclick="() => playerMe.MakeGuess()" disabled=@(!playerMe.PlayerHasGuesses())>Check Guess</button>
             <br>
             @if(playerMe?.Word?.RemainingLetterCount <= playerMe?.Word?.WordToGuess?.Length - 4)
             {
-                <input type="text" @bind="completeGuess" maxlength=  placeholder="Guess Word"/>
-                <button @onclick="() => playerMe.MakeCompleteGuess()">Check Word Guessed</button>
+                <input class="completeguessinput" type="text" @bind="completeGuess" maxlength=  placeholder="Guess Word"/>
+                <button class="completeguessbutton" @onclick="() => playerMe.MakeCompleteGuess()" disabled=@(!playerMe.PlayerHasGuesses())>Check Word Guessed</button>
             }
-
+            <br>
             @if(error != null)
             @error
         </div>
@@ -207,6 +207,18 @@ else
 
     char makeGuess()
     {
+        if(string.IsNullOrWhiteSpace(guess))
+        {
+            error = "You must guess a letter, it cannot be blank";
+            return ' ';
+        }
+
+        if(playerMe.Word.GuessedLetters.Contains(guess[0]))
+        {
+            error = "You've already guessed that letter, try a different letter";
+            return ' ';
+        }
+
         if (playerMe.Word.CheckGuess(guess[0]))
         {
             playerMe.UpdateScore(5 * playerMe.Word.NumberOfGuessedLetters);
@@ -236,6 +248,12 @@ else
 
     string makeCompleteGuess()
     {
+        if(string.IsNullOrWhiteSpace(completeGuess))
+        {
+            error = "You must guess a word of the exact lenght it cannot be blank";
+            return "";
+        }
+
         int remainingLetterCount = playerMe.Word.RemainingLetterCount;
 
         if(completeGuess.Length < playerMe.Word.WordToGuess.Length || completeGuess.Length > playerMe.Word.WordToGuess.Length)

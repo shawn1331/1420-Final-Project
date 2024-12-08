@@ -4,7 +4,9 @@
     --background-color2: rgb(199, 196, 232);
     --text-color: rgb(41, 37, 74);
     background-color: var(--background-color);
-    --text-color2: rgb(40, 35, 86); 
+    --text-color2: rgb(40, 35, 86);
+    --border-color: rgb(155, 151, 201);
+    --input-background-color: 
 
 }
 body {
@@ -13,9 +15,46 @@ body {
     margin: 0;
   }
   .guessbutton{
-    padding: 30px;
+    padding: 5px;
     font-size: larger;
     background-color: var(--background-color2);
+    color: var(--text-color2);
+    border-color: var(--border-color);
+    text-decoration: none;
+    border-width: 3px;
+    box-shadow: none;
+    border-style: solid;
+    border-radius: 5px;
+  }
+  .completeguessbutton{
+    padding: 5px;
+    font-size: larger;
+    background-color: var(--background-color2);
+    color: var(--text-color2);
+    border-color: var(--border-color);
+    text-decoration: none;
+    border-width: 3px;
+    box-shadow: none;
+    border-style: solid;
+    border-radius: 5px;
+  }
+  .guessinput{
+    padding: 5px;
+    font-size: larger;
+    background-color:rgb(211, 209, 234) ;
+    color: var(--text-color2);
+    border-color: var(--border-color);
+    text-decoration: none;
+    border-width: 3px;
+    box-shadow: none;
+    border-style: solid;
+    border-radius: 5px;
+  }
+
+  .completeguessinput{
+    padding: 5px;
+    font-size: larger;
+    background-color:rgb(211, 209, 234) ;
     color: var(--text-color2);
     border-color: var(--border-color);
     text-decoration: none;
