@@ -3,60 +3,61 @@ public class Board : IBoard  // REQ#2.2.1
 {
     public int MaxMissedGuesses { get; private set; }
 
-    public List<char> IncorrectGuesses { get; private set; }
-    public string[] Stages {get;} = new string[] {@"______
-                                                    |    | 
-                                                    |
-                                                    |
-                                                    |
-                                                    |
-                                                    +----",
-                                                     @"______
-                                                       |    |
-                                                       |    O
-                                                       |
-                                                       |
-                                                       |
-                                                       +----",
-                                                       @"______
-                                                         |    |
-                                                         |    O
-                                                         |    |
-                                                         |
-                                                         |
-                                                         +----",
-                                                         @"______
-                                                           |    |
-                                                           |    O
-                                                           |    |
-                                                           |   /
-                                                           |
-                                                           +----",
-                                                           @"______
-                                                             |    |
-                                                             |    O
-                                                             |    |
-                                                             |   / \
-                                                             |
-                                                             +----",
-                                                             @"______
-                                                               |    |
-                                                               |    O
-                                                               |    |\
-                                                               |   / \
-                                                               |
-                                                               +----",
-                                                               @"______
-                                                                 |    |
-                                                                 |    O
-                                                                 |   /|\
-                                                                 |   / \
-                                                                 |
-                                                                 +----"
-                                                       };
+    public List<char> BoardIncorrectGuesses { get; private set; }
+    public string[] Stages {get;} = {
+@"______
+|    | 
+|
+|
+|
+|
++----",
+@"______
+|    |
+|    O
+|
+|
+|
++----",
+@"______
+|    |  
+|    O
+|    |
+|  
+|
++----",
+@"______
+|    |
+|    O
+|    |
+|   /
+|
++----",
+@"______
+|    |
+|    O
+|    |
+|   / \
+|
++----",
+@"______
+|    |
+|    O
+|    |\
+|   / \
+|
++----",
+@"______
+|    |
+|    O
+|   /|\
+|   / \
+|
++----"
+};
     public Board()
     {
-        IncorrectGuesses = new();
+        BoardIncorrectGuesses = new();
         MaxMissedGuesses = 6;
     }
 
@@ -64,8 +65,24 @@ public class Board : IBoard  // REQ#2.2.1
 
     public void AddToBoardMissedGuesses(char guess)//REQ#1.3.3
     {
-        IncorrectGuesses.Add(guess);
+        BoardIncorrectGuesses.Add(char.ToUpper(guess));
         MaxMissedGuesses -= 1;
+    }
+
+    public void ShowBoardPastGuesses()
+    {
+        Console.Write("These are the letters you have already tried: ");
+
+        for (int i = 0; i < BoardIncorrectGuesses.Count; i++)
+        {
+            if (i == BoardIncorrectGuesses.Count - 1)
+            {
+                Console.Write(BoardIncorrectGuesses[i]);
+            }
+            else
+            Console.Write(BoardIncorrectGuesses[i] + ", ");
+        }
+        Console.WriteLine();
     }
     public string GetHangedMan()
     {
@@ -84,10 +101,10 @@ public class Board : IBoard  // REQ#2.2.1
 
     public void PrintWord(Word word)
     {
-        Console.SetCursorPosition(8,6);
+        Console.SetCursorPosition(0,8);
         for (int i = 0; i < word.GuessedLetters.Length; i++)
         {
-            Console.Write(word.GuessedLetters[i]);
+            Console.Write(word.GuessedLetters[i] + " ");
         }
     }
 
@@ -95,5 +112,6 @@ public class Board : IBoard  // REQ#2.2.1
     {
         Console.SetCursorPosition(0,10);
         Console.WriteLine(player.ToString());
+        Console.WriteLine($"You have {MaxMissedGuesses} guesses remaining");
     }
 }

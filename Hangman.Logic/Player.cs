@@ -9,13 +9,15 @@ public abstract class Player : IPlayer // REQ#2.1.1  REQ#2.2.1
     public event Action? PlayerInstanceChanged;
     public Game.GetGuessDelegate GetGuess; // delegate variable
     public Game.GetCompleteGuessDelegate GetCompleteGuess;  // delegate variable
+    public Game.GetInputDelegate GetInput;
 
-    public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) // passing the delegates into the player constructor to pass the methods
+    public Player(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, Game.GetInputDelegate getInput) // passing the delegates into the player constructor to pass the methods
     {
         Name = name;
         Score = 0;
         GetGuess = getGuess;
         GetCompleteGuess = getCompleteGuess;
+        GetInput = getInput;
         MaxMissedGuesses = 6;
         IncorrectGuesses = new();
     }
@@ -47,7 +49,7 @@ public abstract class Player : IPlayer // REQ#2.1.1  REQ#2.2.1
 
     public void AddToMissedGuesses(char guess)//REQ#1.2.3
     {
-        IncorrectGuesses.Add(guess);
+        IncorrectGuesses.Add(char.ToUpper(guess));
         MaxMissedGuesses--;
         PlayerInstanceChanged?.Invoke();
     }
@@ -62,12 +64,16 @@ public abstract class Player : IPlayer // REQ#2.1.1  REQ#2.2.1
             {
                 Console.Write(IncorrectGuesses[i]);
             }
+            else
             Console.Write(IncorrectGuesses[i] + ", ");
         }
+        Console.WriteLine();
     }
 
     public abstract char MakeGuess();  // abstract method definition
 
     public abstract string MakeCompleteGuess();  // abstract method definition
+
+    public abstract char GetUserInput();
 
 }

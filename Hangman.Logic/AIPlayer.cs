@@ -3,7 +3,7 @@ public class AIPlayer : Player, IPlayer  // REQ#2.1.2 REQ#2.2.1
 {
     public List<char> drawnLetters { get; private set; }
 
-    public AIPlayer(Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, string name = "AI") : base(name, getGuess, getCompleteGuess)  // chaining constructor from base class also optional argument
+    public AIPlayer(Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, Game.GetInputDelegate getInput, string name = "AI") : base(name, getGuess, getCompleteGuess, getInput)  // chaining constructor from base class also optional argument
     {
         drawnLetters = new();
     }
@@ -22,5 +22,10 @@ public class AIPlayer : Player, IPlayer  // REQ#2.1.2 REQ#2.2.1
     public override string MakeCompleteGuess()  // polymorphism/ overridden method
     {
         return "";
+    }
+
+    public override char GetUserInput()
+    {
+        return ' ';
     }
 }

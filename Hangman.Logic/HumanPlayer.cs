@@ -1,7 +1,7 @@
 namespace Hangman.Logic;
 public class HumanPlayer : Player, IPlayer  // REQ#2.1.2 REQ#2.2.1
 {
-    public HumanPlayer(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess) : base(name, getGuess, getCompleteGuess)  // chaining constructor from base class
+    public HumanPlayer(string name, Game.GetGuessDelegate getGuess, Game.GetCompleteGuessDelegate getCompleteGuess, Game.GetInputDelegate getInput) : base(name, getGuess, getCompleteGuess, getInput)  // chaining constructor from base class
     {
         
     }
@@ -14,5 +14,10 @@ public class HumanPlayer : Player, IPlayer  // REQ#2.1.2 REQ#2.2.1
     public override string MakeCompleteGuess()  // polymorphism/ overridden method
     {
         return GetCompleteGuess();  // using the delegate variables
+    }
+
+    public override char GetUserInput()
+    {
+        return GetInput();
     }
 }

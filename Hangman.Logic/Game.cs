@@ -9,6 +9,7 @@ public class Game
     public static Random _random = new();
     public delegate char GetGuessDelegate(); // delegate creation
     public delegate string GetCompleteGuessDelegate();  // delegate creation
+    public delegate char GetInputDelegate();
     public event Action? GameStateChanged;
     public event Action? GameReset;
 
@@ -37,20 +38,26 @@ public class Game
     {
         string wholeWordGuess = "";
         char guess = ' ';
+        char wantsToGuessWord = ' ';
 
         while (Board.BoardHasGuesses() && !Word.CompletelyGuessed())
         {
             Console.Clear();
             string currentHangman = Board.GetHangedMan();
-            Console.Write(currentHangman);
+            Console.SetCursorPosition(0,0);
+            Console.WriteLine(currentHangman);
             Board.PrintWord(Word);
             Board.PrintPoints(CurrentPlayer);
 
-            if (CurrentPlayer.IncorrectGuesses.Count != 0)
-                CurrentPlayer.ShowPastGuesses();
+            if (Board.BoardIncorrectGuesses.Count != 0)
+                Board.ShowBoardPastGuesses();
 
             int missingLetterCount = Word.RemainingLetterCount;
-            if (Word.RemainingLetterCount <= Word.GuessedLetters.Length - 3)
+
+            if (CurrentPlayer.GetType() == typeof(HumanPlayer) && Word.RemainingLetterCount <= Word.GuessedLetters.Length - 3)
+                wantsToGuessWord = CurrentPlayer.GetUserInput();
+
+            if (wantsToGuessWord == 'y')
             {
                 wholeWordGuess = CurrentPlayer.MakeCompleteGuess();
 
@@ -67,12 +74,12 @@ public class Game
                 if (Word.CheckGuess(guess))
                 {
                     Console.WriteLine("Correct guess!");
-                    CurrentPlayer.UpdateScore(5);
+                    CurrentPlayer.UpdateScore(5 * Word.NumberOfGuessedLetters);
                 }
                 else
                 {
                     Console.WriteLine("The word does not contain that letter.");
-                    CurrentPlayer.AddToMissedGuesses(guess);
+                    Board.AddToBoardMissedGuesses(guess);
                 }
             }
 
@@ -84,11 +91,11 @@ public class Game
 
         if (!Word.CompletelyGuessed() && !Board.BoardHasGuesses())
         {
-            Console.WriteLine($"Game Over! The word was {Word.ToString}");
+            Console.WriteLine($"Game Over! The word was {Word}");
         }
         else if (Word.CompletelyGuessed())
         {
-            Console.WriteLine($"Congratulations {CurrentPlayer.Name} you won! You have{CurrentPlayer.Score} points. The word was {Word.ToString}");
+            Console.WriteLine($"Congratulations {CurrentPlayer.Name} you won! You have {CurrentPlayer.Score} points. The word was {Word}");
         }
     }
 

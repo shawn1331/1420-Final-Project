@@ -9,78 +9,78 @@
 
 @if (playerMe == null)
 {
-    <p>Joining game...</p>
+    <p class="fontsize">Joining game...</p>
 }
 else if(playerOther == null)
 {
-    <p>Waiting for the opponent to join...</p>
+    <p class="fontsize">Waiting for the opponent to join...</p>
 }
 else if(game == null)
 {
-     <p>Finding game...</p>
+     <p class="fontsize">Finding game...</p>
    
 }
 else if (!playerMe.Word.CompletelyGuessed() && !playerMe.PlayerHasGuesses() &&
          !playerOther.Word.CompletelyGuessed() && !playerOther.PlayerHasGuesses())
 {
-    <h3>Game Over!</h3>
+    <h3 class="fontsize">Game Over!</h3>
     if (playerMe.Score == playerOther.Score)
     {
-        <p>It's A Tie!</p>
+        <p class="fontsize">It's A Tie!</p>
         <br>
         <br>
-        <p>Would You Like To Play Again?</p>
-        <button @onclick="() => playAgain()">Play Again</button>
+        <p class="fontsize">Would You Like To Play Again?</p>
+        <button class="playagain" @onclick="() => playAgain()">Play Again</button>
     }
     else if (playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score ||
              playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score)
     {
-        <p>You Win @playerMe.Name!</p>
+        <p class="fontsize">You Win @playerMe.Name!</p>
         <br>
         <br>
-        <p>Would You Like To Play Again?</p>
-        <button @onclick="() => playAgain()">Play Again</button>
+        <p class="fontsize">Would You Like To Play Again?</p>
+        <button class="playagain" @onclick="() => playAgain()">Play Again</button>
 
     }
     else
     {
-        <p>You Lose @playerMe.Name!</p>
+        <p class="fontsize">You Lose @playerMe.Name!</p>
         <br>
         <br>
-        <p>Would You Like To Play Again?</p>
-        <button @onclick="() => playAgain()">Play Again</button>
+        <p class="fontsize">Would You Like To Play Again?</p>
+        <button class="playagain" @onclick="() => playAgain()">Play Again</button>
 
     }
 }
 else if (playerMe.Word.CompletelyGuessed() && playerOther.Word.CompletelyGuessed())
 {
-    <h3>Game Over!</h3>
+    <h3 class="fontsize">Game Over!</h3>
     if ((playerMe == game?.Player1 && game?.Player1?.Score > game?.Player2?.Score) ||
         (playerMe == game?.Player2 && game?.Player2?.Score > game?.Player1?.Score))
     {
-        <p>You Win @playerMe.Name!</p>
+        <p class="fontsize">You Win @playerMe.Name!</p>
         <br>
         <br>
-        <p>Would You Like To Play Again?</p>
-        <button @onclick="() => playAgain()">Play Again</button>
+        <p class="fontsize">Would You Like To Play Again?</p>
+        <button class="playagain" @onclick="() => playAgain()">Play Again</button>
 
     }
     else if(playerMe.Score == playerOther.Score)
     {
-        <p>It's A Tie!</p>
+        <p class="fontsize">It's A Tie!</p>
         <br>
         <br>
-        <p>Would You Like To Play Again?</p>
-        <button @onclick="() => playAgain()">Play Again</button>
+        <p class="fontsize">Would You Like To Play Again?</p>
+        <button class="playagain" @onclick="() => playAgain()">Play Again</button>
 
     }
     else
     {
-        <p>You Lose @playerMe.Name!</p>
+        <p class="fontsize">You Lose @playerMe.Name!</p>
         <br>
         <br>
         <p>Would You Like To Play Again?</p>
-        <button @onclick="() => playAgain()">Play Again</button>
+        <button class="playagain" @onclick="() => playAgain()">Play Again</button>
 
     }
 }
@@ -88,10 +88,10 @@ else
 {
     <div class="game-container">
         <div class="player-left">
-            <h3>Player: @playerMe.Name</h3>
-            <p>Score: @playerMe.Score</p>
-            <img src="@getImagePath(playerMe)" alt="Hangman State" />
-            <p>Word: 
+            <h3 class="fontsize">Player: @playerMe.Name</h3>
+            <p class="fontsize">Score: @playerMe.Score</p>
+            <img src="@getImagePath(playerMe)" alt="Hangman State"  width="150"px/>
+            <p class="fontsize">Word: 
             @foreach(char letter in playerMe.Word.GuessedLetters)
             {
              <span>@char.ToUpper(letter)</span> <span> </span>
@@ -99,7 +99,7 @@ else
             </p>
             <br>
             <br>
-            <p>Missed Guesses:
+            <p class="fontsize">Missed Guesses:
                 @if(playerMe.IncorrectGuesses.Count > 0)
                 {
                     @foreach(char letter in playerMe.IncorrectGuesses)
@@ -111,8 +111,8 @@ else
         </div>
 
         <div class="game-board">
-            <h1>Make Your Guess!</h1>
-            <p>Remaining Guesses: @playerMe.MaxMissedGuesses</p>
+            <h1 class="fontsize">Make Your Guess!</h1>
+            <p class="fontsize">Remaining Guesses: @playerMe.MaxMissedGuesses</p>
             <input class="guessinput" type="text" @bind="guess" maxlength="1" placeholder="Guess Letter" />
             <button class="guessbutton" @onclick="() => playerMe.MakeGuess()" disabled=@(!playerMe.PlayerHasGuesses())>Check Guess</button>
             <br>
@@ -122,15 +122,17 @@ else
                 <button class="completeguessbutton" @onclick="() => playerMe.MakeCompleteGuess()" disabled=@(!playerMe.PlayerHasGuesses())>Check Word Guessed</button>
             }
             <br>
+            <div class="fontsize">
             @if(error != null)
             @error
+            </div>
         </div>
 
         <div class="player-right">
-            <h3>Opponent: @playerOther?.Name</h3>
-            <p>Score: @playerOther?.Score</p>
-            <img src="@getImagePath(playerOther)" alt="Hangman State" />
-            <p>Word Progress: 
+            <h3 class="fontsize">Opponent: @playerOther?.Name</h3>
+            <p class="fontsize">Score: @playerOther?.Score</p>
+            <img src="@getImagePath(playerOther)" alt="Hangman State" width="150"px />
+            <p class="fontsize">Word Progress: 
                 @foreach(char letter in playerOther?.Word?.GuessedLetters)
                 {
                     @if(letter == '_')
@@ -145,7 +147,7 @@ else
             </p>
             <br>
             <br>
-            <p> Missed Guesses:
+            <p class="fontsize"> Missed Guesses:
                 @if (playerOther?.IncorrectGuesses?.Count > 0)
                 {
                     @foreach(char letter in playerOther.IncorrectGuesses)

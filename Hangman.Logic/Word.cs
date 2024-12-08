@@ -48,7 +48,7 @@ public class Word
         {
             if (WordToGuess[i] == char.ToUpper(letter))
             {
-                GuessedLetters[i] = letter;
+                GuessedLetters[i] = char.ToUpper(letter);
                 correctGuess = true;
                 NumberOfGuessedLetters++;
             }

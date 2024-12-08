@@ -63,6 +63,27 @@ body {
     border-style: solid;
     border-radius: 5px;
   }
+
+  .fontsize{
+    font-size: x-large;
+  }
+
+  .playagain{
+    padding: 5px;
+    font-size: larger;
+    background-color:rgb(211, 209, 234) ;
+    color: var(--text-color2);
+    border-color: var(--border-color);
+    text-decoration: none;
+    border-width: 3px;
+    box-shadow: none;
+    border-style: solid;
+    border-radius: 5px;
+  }
+
+  .game-board{
+    
+  }
   
 h1:focus {
     outline: none;

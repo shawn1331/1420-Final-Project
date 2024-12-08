@@ -2,8 +2,8 @@
 using Hangman.Logic;
 
 string word = Game.SelectWordToGuess();
-Player player1 = new HumanPlayer("Shawn", GetUserGuess, GetUsersCompleteGuess);
-Player player2 = new AIPlayer(GetUserGuess, GetUsersCompleteGuess);  // passing functions in to be used where the delegate variable is
+Player player1 = new HumanPlayer("Shawn", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
+Player player2 = new AIPlayer(GetUserGuess, GetUsersCompleteGuess, GetUserInput);  // passing functions in to be used where the delegate variable is
 Game game = new(player1, player2, word);
 
 bool playAgain = true;
@@ -17,8 +17,7 @@ while (playAgain)
     char loopAgain = Console.ReadKey().KeyChar;
 
     if (loopAgain == 'y')
-        game.ResetGameState(word);
-
+        game.ResetGameState(Game.SelectWordToGuess());
 
     else
         playAgain = false;
@@ -41,7 +40,7 @@ Console.WriteLine("Thank you for playing!");
 static char GetUserGuess()
 {
     Console.WriteLine("Please enter the letter you would like to guess: ");
-    char userGuess = Console.ReadKey().KeyChar;
+    char userGuess = Console.ReadKey(true).KeyChar;
 
     if (char.IsAsciiLetter(userGuess))
         return userGuess;
@@ -71,4 +70,10 @@ static string GetUsersCompleteGuess()
         }
     }
     return completeGuess;
+}
+
+static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
 }
