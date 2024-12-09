@@ -41,8 +41,14 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess);
-        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess, GetUserInput);
+        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         Game game = new(player, aI, "hello");
         char aiGuess = aI.MakeGuess();
         aiGuess.Should().BeOneOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
@@ -85,9 +91,15 @@ public class UnitTest1
             }
             return completeGuess;
         }
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
         char aiGuess;
-        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess);
-        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess);
+        AIPlayer aI = new(GetUserGuess, GetUsersCompleteGuess,GetUserInput);
+        HumanPlayer player = new("Shawn", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         Game game = new(player, aI, "hello");
         for (int i = 0; i < 20; i++)
         {
@@ -134,7 +146,13 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         player.PlayerHasGuesses().Should().Be(true);
     }
 
@@ -175,7 +193,13 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         player.Word = new("test");
         char playerGuess = 'H';
         player.Word.CheckGuess(playerGuess);
@@ -275,7 +299,7 @@ public class UnitTest1
         {
             board.AddToBoardMissedGuesses(guess);
         }
-        board.IncorrectGuesses.Should().BeEquivalentTo(new List<char> { 'A' });
+        board.BoardIncorrectGuesses.Should().BeEquivalentTo(new List<char> { 'A' });
 
     }
 
@@ -316,7 +340,13 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         player.Word = new("test");
         char playerGuess = 'E';
         player.Word.CheckGuess(playerGuess);
@@ -362,7 +392,13 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         player.Word = new("test");
         char playerGuess = 'T';
         player.Word.CheckGuess(playerGuess);
@@ -408,7 +444,13 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess, GetUserInput);
         player.Word = new("test");
         string playerGuess = "TEST";
         int numberOfLetters = player.Word.RemainingLetterCount;
@@ -456,7 +498,13 @@ public class UnitTest1
             }
             return completeGuess;
         }
-        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess);
+
+        static char GetUserInput()
+{
+    Console.WriteLine("Would you like to guess the entire word y/n?");
+    return Console.ReadKey(true).KeyChar;
+}
+        Player player = new HumanPlayer("test", GetUserGuess, GetUsersCompleteGuess,GetUserInput);
         player.Word = new("test");
         string playerGuess = "BOMB";
         player.Word.CheckCompleteGuess(playerGuess);

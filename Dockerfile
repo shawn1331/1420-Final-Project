@@ -11,5 +11,5 @@ RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /App/Hangman.Web 
-COPY --from=build-env /App/Hangman.Web/out .
+COPY --from=build-env /App/out .
 ENTRYPOINT ["dotnet", "Hangman.Web.dll"]
