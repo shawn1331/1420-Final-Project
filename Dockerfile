@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
+EXPOSE 8080 
+WORKDIR /App
+
+COPY . ./
+
+RUN dotnet restore
+
+RUN cd Hangman.Web 
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /App/Hangman.Web 
+COPY --from=build-env /App/Hangman.Web/out .
+ENTRYPOINT ["dotnet", "Hangman.Web.dll"]

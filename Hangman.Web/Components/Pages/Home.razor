@@ -5,6 +5,13 @@
 <PageTitle>Welcome to Hangman</PageTitle>
 
 <h1>Hangman Lobby</h1>
+
+<div class="fontsize">
+    @if(error != null)
+    @error
+</div>
+
+
 @if (Lobby.OpenGames.Any())
 {
     <h3>Choose An Open Game</h3>
@@ -92,11 +99,20 @@
 
     List<ScoreBoard> scores;
     IEnumerable<(string Name, int Score)> topTen;
+    string? error;
 
     void createGame()
     {
-        bool result = Lobby.CreateGame(newGameName, Game.SelectWordToGuess());
-        newGameName = null;
+        if (string.IsNullOrWhiteSpace(newGameName))
+        {
+            error = "You cannot enter a blank name for a game";
+        }
+
+        else
+        {
+            Lobby.CreateGame(newGameName, Game.SelectWordToGuess());
+            newGameName = null;
+        }
         StateHasChanged();
     }
 
